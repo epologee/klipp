@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'klipp'
+
+do_something *['a','a','12']
+
+puts Klipp.new *ARGV

@@ -1,1 +1,6 @@
 token: PARTNER
+title: Partner name
+subtitle: e.g. 'FC Utrecht'
+default: Qwerty
+validate: !ruby/regexp '/^[A-Z][A-Za-z0-9 ]{2,}$/'
+not_valid_response: Should be at least three characters long and start with a capital character
