@@ -7,8 +7,4 @@ describe Klipp do
     Klipp.new.should be_a Klipp
   end
 
-  it 'tests' do
-    'klipps/test.yml'
-  end
-  
 end

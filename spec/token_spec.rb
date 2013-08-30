@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe Token do
-  it 'tests' do
-    false.should eq true
+
+  it 'has a token' do
+    token = Token.new read_fixture('klipps/single-token.yml')
+    token.token.should eq "PARTNER"
   end
+
 end
