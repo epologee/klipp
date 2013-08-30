@@ -1,33 +1,90 @@
 require 'spec_helper'
+require 'highline/import'
 
 describe Token do
 
-  before do
-    @token = Token.new read_fixture('klipps/single-token.yml')
+  context 'with a single token yaml' do
+
+    before do
+      @token = Token.new read_fixture('klipps/single-token.yml')
+    end
+
+    it 'has a token' do
+      @token.token.should eq 'PARTNER'
+    end
+
+    it 'has a title' do
+      @token.title.should eq 'Partner name'
+    end
+
+    it 'has a subtitle' do
+      @token.subtitle.should eq "e.g. 'FC Utrecht'"
+    end
+
+    it 'has a default value' do
+      @token.default.should eq 'Qwerty'
+    end
+
+    it 'has a validate regex' do
+      @token.validate.should eq /^[A-Z][A-Za-z0-9 ]{2,}$/
+    end
+
+    it 'has a response when not valid' do
+      @token.not_valid_response.should eq 'Should be at least three characters long and start with a capital character'
+    end
+
   end
 
-  it 'has a token' do
-    @token.token.should eq 'PARTNER'
-  end
+  context 'with a valid token object' do
 
-  it 'has a title' do
-    @token.title.should eq 'Partner name'
-  end
+    before do
+      @input = StringIO.new
+      @output = StringIO.new
+      @terminal = HighLine.new(@input, @output)
+      @token = Token.new read_fixture('klipps/single-token.yml')
+    end
 
-  it 'has a subtitle' do
-    @token.subtitle.should eq "e.g. 'FC Utrecht'"
-  end
+    it 'can ask a question' do
+      simulate_input 'Something'
 
-  it 'has a default value' do
-    @token.default.should eq 'Qwerty'
-  end
+      @token.ask_for_input @terminal
 
-  it 'has a validate regex' do
-    @token.validate.should eq /^[A-Z][A-Za-z0-9 ]{2,}$/
-  end
+      @output.string.should include 'Partner name'
+      @output.string.should include "e.g. 'FC Utrecht'"
+    end
 
-  it 'has a response when not valid' do
-    @token.not_valid_response.should eq 'Should be at least three characters long and start with a capital character'
+    it 'records the answer' do
+      name = 'Qwerty'
+      simulate_input name
+
+      @token.ask_for_input @terminal
+
+      @token.value.should eq name
+    end
+
+    it 'uses highline validation' do
+      simulate_input 'Qw'
+
+      expect {
+        @token.ask_for_input @terminal
+      }.to raise_error(EOFError)
+
+      @output.string.should include 'Should be at least three characters long and start with a capital character'
+    end
+
+    it 'prefills a default value' do
+      simulate_input
+
+      @token.ask_for_input @terminal
+
+      @token.value.should eq 'Qwerty'
+    end
+
+    def simulate_input value = ''
+      @input << value << "\n"
+      @input.rewind
+    end
+
   end
 
 end
