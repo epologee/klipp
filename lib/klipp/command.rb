@@ -4,8 +4,20 @@ module Klipp
     autoload :Project, 'klipp/command/project'
 
     @@output = nil
-    def self.output=(output); @@output = output; end
-    def self.output; @@output || $stdout; end
+
+    def self.output=(output)
+      ; @@output = output;
+    end
+
+    def self.output;
+      @@output || $stdout;
+    end
+
+    class Version < StandardError
+      def message
+        Klipp::VERSION
+      end
+    end
 
     class Help < StandardError
       def initialize(command_class, argv, unrecognized_command = nil)
@@ -49,29 +61,27 @@ module Klipp
     end
 
     class ARGS < Array
-      def options;
-        select { |x| x.to_s[0, 1] == '-' };
+      def options
+        select { |x| x.to_s[0, 1] == '-' }
       end
 
-      def arguments;
-        self - options;
+      def arguments
+        self - options
       end
 
       def option(name)
-        ; !!delete(name);
+        !!delete(name)
       end
 
-      def shift_argument;
-        (arg = arguments[0]) && delete(arg);
+      def shift_argument
+        (arg = arguments[0]) && delete(arg)
       end
     end
 
     def self.parse(*argv)
       args = ARGS.new(argv)
-      if args.option('--version')
-        output.puts VERSION
-        exit!(0)
-      end
+
+      raise Version.new if args.option('--version')
 
       show_help = args.option('--help')
 
@@ -101,7 +111,7 @@ module Klipp
 
     rescue Exception => e
       output.puts e.message
-      unless e.is_a?(Help)
+      unless e.is_a?(Help) || e.is_a?(Version)
         output.puts *e.backtrace
         exit 1
       end

@@ -8,9 +8,7 @@ describe Klipp::Command do
   end
 
   it 'prints the version number' do
-    opt = ''
-    opt << '--version'
-    Klipp::Command.run
+    Klipp::Command.run *%w[--version]
     @output.string.should include Klipp::VERSION
   end
 
