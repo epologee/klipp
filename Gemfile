@@ -5,4 +5,4 @@ gemspec
 
 gem 'coveralls', require: false
 gem 'rspec'
-gem 'mocha'
+gem 'mocha', :require => false
