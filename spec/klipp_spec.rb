@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Klipp do
   
-  it "initializes the application" do
+  xit "initializes the application" do
     Klipp.new.should be_a Klipp
   end
 

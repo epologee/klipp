@@ -1,12 +1,12 @@
 require 'spec_helper'
 require 'highline/import'
 
-describe Token do
+describe Klipp::Token do
 
   context 'with a single token yaml' do
 
     before do
-      @token = Token.new read_fixture('klipps/single-token.yml')
+      @token = Klipp::Token.new read_fixture('klipps/single-token.yml')
     end
 
     it 'has a token' do
@@ -41,7 +41,7 @@ describe Token do
       @input = StringIO.new
       @output = StringIO.new
       @terminal = HighLine.new(@input, @output)
-      @token = Token.new read_fixture('klipps/single-token.yml')
+      @token = Klipp::Token.new read_fixture('klipps/single-token.yml')
     end
 
     it 'can ask a question' do
