@@ -5,11 +5,8 @@ module Klipp
   class Template
 
     def initialize path, name
-      #if File.exists? File.join(path, "#{name}.yml")
-      #
-      #else
-      #  nil
-      #end
+      full_path = File.join(path, "#{name}.yml")
+      raise "Template not found at #{full_path}" unless File.exists? full_path
     end
 
   end
