@@ -1,3 +1,5 @@
+require 'colored'
+
 module Klipp
 
   class Command
@@ -6,11 +8,11 @@ module Klipp
     @@output = nil
 
     def self.output=(output)
-      ; @@output = output;
+      @@output = output
     end
 
-    def self.output;
-      @@output || $stdout;
+    def self.output
+      @@output || $stdout
     end
 
     class Version < StandardError
@@ -61,33 +63,41 @@ module Klipp
     end
 
     class ARGS < Array
-      def options; select { |x| x.to_s[0, 1] == '-' };  end
-      def arguments; self - options; end
-      def option(name); !!delete(name); end
-      def shift_argument; (arg = arguments[0]) && delete(arg); end
+      def options
+        select { |x| x.to_s[0, 1] == '-' }
+      end
+
+      def arguments
+        self - options
+      end
+
+      def splice_option(name)
+        !!delete(name)
+      end
+
+      def shift_argument
+        (arg = arguments[0]) && delete(arg)
+      end
     end
 
     def self.parse(*argv)
-      args = ARGS.new(argv)
+      command_line_arguments = ARGS.new(argv)
 
-      raise Version.new if args.option('--version')
+      raise Version.new if command_line_arguments.splice_option('--version')
 
-      show_help = args.option('--help')
+      command_line_arguments.splice_option('--help')
 
-      String.send(:define_method, :colorize) { |string, _| string } if args.option('--no-color')
+      String.send(:define_method, :colorize) { |string, _| string } if command_line_arguments.splice_option('--no-color')
 
-      command_class = case command_argument = args.shift_argument
-                        when 'project' then
-                          Project
-                      end
+      command_argument = command_line_arguments.shift_argument
 
-      if command_class.nil?
-        raise Help.new(self, args, command_argument)
-      elsif show_help
-        raise Help.new(command_class, args)
-      else
-        command_class.new(args)
+      case command_argument
+        when 'project' then
+          Project.new(command_line_arguments)
+        else
+          raise Help.new(self, command_line_arguments, command_argument)
       end
+
     end
 
     def self.run(*argv)

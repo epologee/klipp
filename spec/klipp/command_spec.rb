@@ -30,7 +30,7 @@ describe Klipp::Command do
   end
 
   it 'prints the help when asked for' do
-    Klipp::Command.run *%w[--help]
+    Klipp::Command.run *["--help"]
     @output.string.should include 'Options:'
     @output.string.should include '--help'
     @output.string.should include '--version'
