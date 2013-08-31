@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'coveralls'
+require 'mocha/api'
 SimpleCov.start
 
 SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter

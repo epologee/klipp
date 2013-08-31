@@ -36,4 +36,9 @@ describe Klipp::Command do
     @output.string.should include '--version'
   end
 
+  it 'exits the program when an unknown error is raised' do
+    Klipp::Command.expects(:parse).returns StandardError.new
+    expect { Klipp::Command.run *["--help"] }.to raise_error SystemExit
+  end
+
 end

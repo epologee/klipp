@@ -7,7 +7,7 @@ describe Klipp do
 
     it 'runs commands' do
 
-      Klipp::Command.run(ARGV << 'project new Example')
+      Klipp::Command.run(*%w[project new Example])
 
     end
 
