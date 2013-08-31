@@ -7,12 +7,10 @@ describe Klipp::Template do
     Klipp::Template.new(path, 'Example').should be_a Klipp::Template
   end
 
-  it 'does not initialize with an invalid path/name' do
+  it 'raises an error when initialized with an invalid path/name' do
     expect {
-      Klipp::Template.new('bull', 'shit').should_not be_a Klipp::Template
+      Klipp::Template.new('bull', 'shit')
     }.to raise_error(EOFError)
-
-
   end
 
 end
