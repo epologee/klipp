@@ -5,7 +5,7 @@ describe Klipp do
 
   describe 'Project' do
 
-    it 'routes' do
+    it 'runs commands' do
 
       Klipp::Command.run(ARGV << 'project new Example')
 

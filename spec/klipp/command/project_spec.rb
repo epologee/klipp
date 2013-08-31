@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Klipp::Project do
+describe Klipp::Command::Project do
 
   xit 'initializes with a valid path and name' do
     path = File.join(__dir__, '..', 'fixtures', 'templates')

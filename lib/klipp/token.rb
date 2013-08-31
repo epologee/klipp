@@ -1,6 +1,7 @@
 require 'yaml'
 
 module Klipp
+
   class Token
     attr_reader :token, :title, :subtitle, :default, :validate, :not_valid_response, :value
 
