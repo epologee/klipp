@@ -61,21 +61,10 @@ module Klipp
     end
 
     class ARGS < Array
-      def options
-        select { |x| x.to_s[0, 1] == '-' }
-      end
-
-      def arguments
-        self - options
-      end
-
-      def option(name)
-        !!delete(name)
-      end
-
-      def shift_argument
-        (arg = arguments[0]) && delete(arg)
-      end
+      def options; select { |x| x.to_s[0, 1] == '-' };  end
+      def arguments; self - options; end
+      def option(name); !!delete(name); end
+      def shift_argument; (arg = arguments[0]) && delete(arg); end
     end
 
     def self.parse(*argv)
