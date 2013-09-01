@@ -6,7 +6,12 @@ module Klipp
     attr_reader :token, :title, :subtitle, :default, :validate, :not_valid_response, :value
 
     def initialize(token_yml)
-      parsed = YAML.load token_yml
+      if token_yml.is_a? String
+        parsed = YAML.load token_yml
+      else
+        parsed = token_yml
+      end
+
       @token = parsed['token']
       @title = parsed['title']
       @subtitle = parsed['subtitle']

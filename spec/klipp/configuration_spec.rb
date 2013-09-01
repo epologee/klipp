@@ -3,6 +3,10 @@ require 'tmpdir'
 
 describe Klipp::Configuration do
 
+  before do
+    Klipp::Configuration.root_dir = nil
+  end
+
   it 'points to .klipp inside the user\'s home directory' do
     Klipp::Configuration.root_dir.should eq File.join(Dir.home, '.klipp')
   end

@@ -41,11 +41,9 @@ describe Klipp::Command do
     expect { Klipp::Command.run *["--help"] }.to raise_error SystemExit
   end
 
-  xit 'runs project commands' do
-    project = Klipp::Command::Project.new %w[new Example]
-    project.expects(:run)
-    Klipp::Command.expects(:parse).returns project
-    Klipp::Command.run(*%w[project])
+  it 'runs project commands' do
+    expect { Klipp::Command.run *%w[project] }.to raise_error SystemExit
+    @output.string.should include 'klipp project list'
   end
 
 end

@@ -23,6 +23,8 @@ module Klipp
       def message
         message = [
             '',
+            @command_class.banner.gsub(/\$ klipp (.*)/, '$ klipp \1'.green),
+            '',
             'Options:',
             '',
             options,
@@ -56,43 +58,25 @@ module Klipp
       ]
     end
 
-    class ARGS < Array
-      def options
-        select { |x| x.to_s[0, 1] == '-' }
-      end
-
-      def arguments
-        self - options
-      end
-
-      def splice_option(name)
-        !!delete(name)
-      end
-
-      def shift_argument
-        (arg = arguments[0]) && delete(arg)
-      end
-    end
-
     def self.parse(*argv)
-      command_line_arguments = ARGS.new(argv)
+      command_line_params = ParameterList.new(argv)
 
-      raise Version.new if command_line_arguments.splice_option('--version')
+      raise Version.new if command_line_params.splice_option('--version')
 
-      command_line_arguments.splice_option('--help')
+      command_line_params.splice_option('--help')
 
-      String.send(:define_method, :colorize) { |string, _| string } if command_line_arguments.splice_option('--no-color')
+      String.send(:define_method, :colorize) { |string, _| string } if command_line_params.splice_option('--no-color')
 
-      command_argument = command_line_arguments.shift_argument
+      command_argument = command_line_params.shift_argument
 
       command_class = case command_argument
                         when 'project' then
                           Project
                         else
-                          raise Help.new(self, command_line_arguments, command_argument)
+                          raise Help.new(self, command_line_params, command_argument)
                       end
 
-      command_class.new(command_line_arguments)
+      command_class.new(command_line_params)
     end
 
     def self.run(*argv)
