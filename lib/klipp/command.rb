@@ -4,7 +4,8 @@ require 'klipp/buffered_output'
 module Klipp
 
   class Command
-    extend BufferedOutput
+    extend BufferedOutput::ClassMethods
+    include BufferedOutput::InstanceMethods
 
     autoload :Project, 'klipp/command/project'
 
@@ -96,16 +97,16 @@ module Klipp
 
     def self.run(*argv)
       sub_command = self.parse(*argv)
-      sub_command.run
+        sub_command.run
 
         #rescue Interrupt
         #  self.output.puts "[!] Cancelled".red
         #  exit(1)
 
     rescue Exception => e
-      output.puts e.message
+      buffer_puts e.message
       unless e.is_a?(Help) || e.is_a?(Version)
-        output.puts *e.backtrace
+        buffer_puts *e.backtrace
       end
       exit 1
     end

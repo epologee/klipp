@@ -5,7 +5,8 @@ module Klipp
   class Command
 
     class Project
-      extend BufferedOutput
+      extend BufferedOutput::ClassMethods
+      include BufferedOutput::InstanceMethods
 
       def initialize(arguments)
         #hier was je gebleven
