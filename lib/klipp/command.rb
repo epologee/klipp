@@ -1,19 +1,12 @@
 require 'colored'
+require 'klipp/buffered_output'
 
 module Klipp
 
   class Command
+    extend BufferedOutput
+
     autoload :Project, 'klipp/command/project'
-
-    @@output = nil
-
-    def self.output=(output)
-      @@output = output
-    end
-
-    def self.output
-      @@output || $stdout
-    end
 
     class Version < StandardError
       def message
@@ -91,13 +84,14 @@ module Klipp
 
       command_argument = command_line_arguments.shift_argument
 
-      case command_argument
-        when 'project' then
-          Project.new(command_line_arguments)
-        else
-          raise Help.new(self, command_line_arguments, command_argument)
-      end
+      command_class = case command_argument
+                        when 'project' then
+                          Project
+                        else
+                          raise Help.new(self, command_line_arguments, command_argument)
+                      end
 
+      command_class.new(command_line_arguments)
     end
 
     def self.run(*argv)
@@ -112,8 +106,8 @@ module Klipp
       output.puts e.message
       unless e.is_a?(Help) || e.is_a?(Version)
         output.puts *e.backtrace
-        exit 1
       end
+      exit 1
     end
 
   end

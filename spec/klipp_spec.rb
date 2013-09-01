@@ -5,11 +5,6 @@ describe Klipp do
 
   describe 'Project' do
 
-    it 'runs commands' do
-
-      Klipp::Command.run(*%w[project new Example])
-
-    end
 
   end
 

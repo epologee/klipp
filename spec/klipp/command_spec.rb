@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'klipp/version'
+require 'klipp/buffered_output'
 
 describe Klipp::Command do
 
@@ -18,27 +19,33 @@ describe Klipp::Command do
   end
 
   it 'prints the version number' do
-    Klipp::Command.run *%w[--version]
+    expect { Klipp::Command.run *%w[--version] }.to raise_error SystemExit
     @output.string.should include Klipp::VERSION
   end
 
   it 'prints the help without any commands or options' do
-    Klipp::Command.run *%w[]
+    expect { Klipp::Command.run *%w[] }.to raise_error SystemExit
     @output.string.should include 'Options:'
     @output.string.should include '--help'
     @output.string.should include '--version'
   end
 
   it 'prints the help when asked for' do
-    Klipp::Command.run *["--help"]
+    expect { Klipp::Command.run *["--help"] }.to raise_error SystemExit
     @output.string.should include 'Options:'
     @output.string.should include '--help'
     @output.string.should include '--version'
   end
 
   it 'exits the program when an unknown error is raised' do
-    Klipp::Command.expects(:parse).returns StandardError.new
     expect { Klipp::Command.run *["--help"] }.to raise_error SystemExit
+  end
+
+  xit 'runs project commands' do
+    project = Klipp::Command::Project.new %w[new Example]
+    project.expects(:run)
+    Klipp::Command.expects(:parse).returns project
+    Klipp::Command.run(*%w[project])
   end
 
 end
