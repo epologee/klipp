@@ -10,7 +10,7 @@ describe Klipp::Token do
     end
 
     it 'has a token' do
-      @token.token.should eq 'PARTNER'
+      @token.name.should eq 'PARTNER'
     end
 
     it 'has a title' do

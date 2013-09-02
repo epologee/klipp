@@ -27,6 +27,8 @@ module Klipp
         case sub_command_argument
           when 'list'
             list
+          when 'create' || 'new'
+            create
           else
             raise Klipp::Command::Help.new(self.class, @params, sub_command_argument)
         end
@@ -37,6 +39,11 @@ module Klipp
         template_files.each do |file|
           buffer_puts("+ #{File.basename(file, '.*').green}")
         end
+      end
+
+      def create
+        # match template name with existing template
+
       end
 
     end

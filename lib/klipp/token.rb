@@ -3,7 +3,8 @@ require 'yaml'
 module Klipp
 
   class Token
-    attr_reader :token, :title, :subtitle, :default, :validate, :not_valid_response, :value
+    attr_accessor :value
+    attr_reader :name, :title, :subtitle, :default, :validate, :not_valid_response
 
     def initialize(token_yml)
       if token_yml.is_a? String
@@ -12,7 +13,7 @@ module Klipp
         parsed = token_yml
       end
 
-      @token = parsed['token']
+      @name = parsed['name']
       @title = parsed['title']
       @subtitle = parsed['subtitle']
       @default = parsed['default']
