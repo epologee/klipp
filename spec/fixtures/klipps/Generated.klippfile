@@ -1,0 +1,11 @@
+PARTNER:
+# e.g. 'FC Utrecht'
+
+PROJECT_TITLE:
+# e.g. 'FC Utrecht Agenda'
+
+PROJECT_ID:
+# e.g. 'FCUtrechtAgenda'
+
+CLASS_PREFIX:
+# e.g. 'FCU'

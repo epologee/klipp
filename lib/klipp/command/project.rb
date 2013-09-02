@@ -6,12 +6,22 @@ module Klipp
       extend BufferedOutput::ClassMethods
       include BufferedOutput::InstanceMethods
 
+      @@file_output = nil
+
+      def self.file_output=(file_output)
+        @@file_output = file_output
+      end
+
+      def self.file_output
+        @@file_output
+      end
+
       def initialize(arguments)
         @params = ParameterList.new(arguments)
       end
 
       def self.banner
-        sub_commands = ['list']
+        sub_commands = %w(list prepare)
         banner = "To see help for the available sub commands run:\n\n"
         banner + sub_commands.map { |cmd| "  * #{('klipp project '+cmd).green} --help" }.join("\n")
       end
@@ -27,8 +37,8 @@ module Klipp
         case sub_command_argument
           when 'list'
             list
-          when 'create' || 'new'
-            create
+          when 'prepare'
+            prepare
           else
             raise Klipp::Command::Help.new(self.class, @params, sub_command_argument)
         end
@@ -41,9 +51,14 @@ module Klipp
         end
       end
 
-      def create
-        # match template name with existing template
+      def prepare
+        template_name = @params.shift_argument
+        raise Klipp::Command::Help.new(self.class, @params) unless template_name
 
+        template = Klipp::Template.new(Klipp::Configuration.templates_dir, template_name)
+        target_file = self.class.file_output || template.klippfile
+        raise "Klippfile already exists: #{template.klippfile}" if File.exists? target_file
+        File.open(target_file, 'w') { |f| f.write(template.generated_klippfile) }
       end
 
     end

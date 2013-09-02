@@ -81,7 +81,7 @@ module Klipp
 
     def self.run(*argv)
       sub_command = self.parse(*argv)
-        sub_command.run
+      sub_command.run
 
         #rescue Interrupt
         #  self.output.puts "[!] Cancelled".red
@@ -89,9 +89,9 @@ module Klipp
 
     rescue Exception => e
       buffer_puts e.message
-      unless e.is_a?(Help) || e.is_a?(Version)
-        buffer_puts *e.backtrace
-      end
+      #unless e.is_a?(Help) || e.is_a?(Version)
+      #  buffer_puts e.backtrace
+      #end
       exit 1
     end
 

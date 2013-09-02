@@ -1,4 +1,4 @@
-gem uninstall klipp
+gem uninstall klipp -x
 rbenv rehash
 rm klipp-0.0.1.gem
 gem build klipp.gemspec

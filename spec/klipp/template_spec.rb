@@ -25,6 +25,14 @@ describe Klipp::Template do
         @template = Klipp::Template.new(@templates_dir, 'Example')
       end
 
+      it 'knows the name of the corresponding .klippfile' do
+        @template.klippfile.should eq 'Example.klippfile'
+      end
+
+      it 'can generate stubbed contents for a .klippfile' do
+        @template.generated_klippfile.should eq File.read(File.join(@klipps_dir,'Generated.klippfile'))
+      end
+
       it 'contains a matching number of tokens' do
         @template.tokens.should have_exactly(4).items
       end

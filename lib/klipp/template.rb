@@ -7,6 +7,7 @@ module Klipp
     attr_reader :tokens
 
     def initialize path, name
+      @name = name
       full_path = File.join(path, "#{name}.yml")
       raise "Template not found at #{full_path}" unless File.exists? full_path
       yaml_tokens = YAML.load ERB.new(File.read(full_path)).result
@@ -29,6 +30,14 @@ module Klipp
 
     def value_for_token(name)
       @tokens.detect { |t| t.name == name }.value
+    end
+
+    def klippfile
+      "#{@name}.klippfile"
+    end
+
+    def generated_klippfile
+      @tokens.map { |t| "#{t.name}:\n# #{t.subtitle}"}.join("\n\n")
     end
 
   end
