@@ -85,6 +85,11 @@ describe Klipp do
       should include 'Example'
     end
 
+    it 'raises an error when there are no templates' do
+      Klipp.expects(:template_files).returns([])
+      expect { Klipp.list }.to raise_error RuntimeError
+    end
+
   end
 
   describe 'when versioning' do

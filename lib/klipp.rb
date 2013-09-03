@@ -4,6 +4,7 @@ require 'klipp/configuration'
 require 'klipp/token'
 require 'klipp/template'
 require 'klipp/parameter_list'
+require 'colorize'
 
 module Klipp
   extend BufferedOutput::ClassMethods
@@ -23,12 +24,14 @@ module Klipp
     @params = Klipp::ParameterList.new(argv)
     command = @params.shift_argument
     case command
-      when 'prepare'
-        prepare @params.first
-      when 'list'
-        list
       when 'version'
         version
+      when 'list'
+        list
+      when 'prepare'
+        prepare @params.first
+      when 'create'
+        create @params.first
       when nil
         raise HelpRequest.new('Use one of the commands below to start with klipp.', false, true)
       else
@@ -44,9 +47,12 @@ module Klipp
   end
 
   def self.list
+    files = template_files
+
+    raise "No templates found. Create a template directory and .yml file in #{Klipp::Configuration.templates_dir}" unless files.length > 0
+
     buffer_puts("Available templates:\n\n")
-    template_files = Dir.glob File.join(Klipp::Configuration.templates_dir, '*.yml')
-    template_files.each do |file|
+    files.each do |file|
       buffer_puts("  + #{File.basename(file, '.*').green}")
     end
   end
@@ -57,6 +63,16 @@ module Klipp
     template = Klipp::Template.new(Klipp::Configuration.templates_dir, template_name)
     raise "#{template.klippfile} already exists. Delete it if you want to prepare a new template." if File.exists? template.klippfile
     IO.write(template.klippfile, template.generated_klippfile)
+  end
+
+  def self.create(template_name)
+
+  end
+
+  private
+
+  def self.template_files
+    Dir.glob File.join(Klipp::Configuration.templates_dir, '*.yml')
   end
 
 end
