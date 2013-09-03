@@ -24,7 +24,7 @@ module Klipp
     command = @params.shift_argument
     case command
       when 'prepare'
-        prepare @params
+        prepare @params.first
       when 'list'
         list
       when nil
@@ -38,18 +38,19 @@ module Klipp
   end
 
   def self.list
+    buffer_puts("Available templates:\n\n")
     template_files = Dir.glob File.join(Klipp::Configuration.templates_dir, '*.yml')
     template_files.each do |file|
-      buffer_puts("+ #{File.basename(file, '.*').green}")
+      buffer_puts("  + #{File.basename(file, '.*').green}")
     end
   end
 
-  def self.prepare(params)
-    params = Klipp::ParameterList.new(params) unless params.is_a? Klipp::ParameterList
-    template_name = params.shift_argument
+  def self.prepare(template_name)
     raise HelpRequest.new 'Add a template name to the `prepare` command.' unless template_name
 
     template = Klipp::Template.new(Klipp::Configuration.templates_dir, template_name)
+    raise "#{template.klippfile} already exists. Delete it if you want to prepare a new template." if File.exists? template.klippfile
+    IO.write(template.klippfile, template.generated_klippfile)
   end
 
 end

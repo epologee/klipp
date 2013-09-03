@@ -9,7 +9,7 @@ module Klipp
     def initialize path, name
       @name = name
       full_path = File.join(path, "#{name}.yml")
-      raise "Template not found at #{full_path}" unless File.exists? full_path
+      raise "Unknown template name: #{name}" unless File.exists? full_path
       yaml_tokens = YAML.load ERB.new(File.read(full_path)).result
       @tokens = yaml_tokens.map { |yaml_token| Klipp::Token.new(yaml_token) }
     end

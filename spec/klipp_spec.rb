@@ -33,8 +33,26 @@ describe Klipp do
 
   describe 'when preparing' do
 
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns File.join(__dir__, 'fixtures')
+    end
+
     it 'raises help if the template argument is missing' do
-      expect { Klipp.prepare %w[] }.to raise_error HelpRequest
+      expect { Klipp.prepare nil }.to raise_error HelpRequest
+    end
+
+    it 'saves a klippfile' do
+      IO.expects(:write).with('Example.klippfile', anything).once
+      Klipp.prepare 'Example'
+    end
+
+    it 'raises an error when the template argument is incorrect' do
+      expect { Klipp.prepare 'Bullshit' }.to raise_error RuntimeError
+    end
+
+    it 'raises an error when a .klippfile for the template already exists' do
+      File.stubs(:exists?).with(anything).returns true
+      expect { Klipp.prepare 'Example' }.to raise_error RuntimeError
     end
 
   end
