@@ -87,12 +87,12 @@ module Klipp
         #  self.output.puts "[!] Cancelled".red
         #  exit(1)
 
-    rescue Exception => e
-      buffer_puts e.message
-      #unless e.is_a?(Help) || e.is_a?(Version)
-      #  buffer_puts e.backtrace
-      #end
-      exit 1
+    #rescue Exception => e
+    #  buffer_puts e.message
+    #  #unless e.is_a?(Help) || e.is_a?(Version)
+    #  #  buffer_puts e.backtrace
+    #  #end
+    #  exit 1
     end
 
   end

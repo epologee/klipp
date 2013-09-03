@@ -3,4 +3,4 @@
 require 'klipp'
 
 Klipp::Configuration.auto_create_dirs = true
-Klipp::Command.run(*ARGV)
+Klipp.route(*ARGV)
