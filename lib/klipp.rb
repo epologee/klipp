@@ -25,6 +25,8 @@ module Klipp
     case command
       when 'prepare'
         prepare @params
+      when 'list'
+        list
       when nil
         raise HelpRequest.new('Use one of the commands below to start with klipp.', false, true)
       else
@@ -35,16 +37,19 @@ module Klipp
     display_exception e
   end
 
+  def self.list
+    template_files = Dir.glob File.join(Klipp::Configuration.templates_dir, '*.yml')
+    template_files.each do |file|
+      buffer_puts("+ #{File.basename(file, '.*').green}")
+    end
+  end
+
   def self.prepare(params)
     params = Klipp::ParameterList.new(params) unless params.is_a? Klipp::ParameterList
     template_name = params.shift_argument
     raise HelpRequest.new 'Add a template name to the `prepare` command.' unless template_name
 
     template = Klipp::Template.new(Klipp::Configuration.templates_dir, template_name)
-  end
-
-  def self.create(params)
-
   end
 
 end
