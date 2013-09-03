@@ -14,6 +14,16 @@ describe Klipp do
       should include 'Xcode templates for the rest of us.'
     end
 
+    it 'prints warnings accordingly' do
+      expect { Klipp.route *%w[prepare Bullshit] }.to raise_error SystemExit
+      should include '[!]'
+    end
+
+    it 'raises a warning when routing unknown commands' do
+      expect { Klipp.route *%w[allyourbase] }.to raise_error SystemExit
+      should include '[!]'
+    end
+
     it 'routes `prepare`' do
       Klipp.expects(:prepare)
       Klipp.route *%w[prepare Example]
@@ -27,6 +37,11 @@ describe Klipp do
     it 'routes `list`' do
       Klipp.expects(:list)
       Klipp.route *%w[list]
+    end
+
+    it 'routes version' do
+      Klipp.expects(:version)
+      Klipp.route *%w[version]
     end
 
   end
@@ -63,6 +78,15 @@ describe Klipp do
       Klipp::Configuration.stubs(:root_dir).returns File.join(__dir__, 'fixtures')
       Klipp.list
       should include 'Example'
+    end
+
+  end
+
+  describe 'when versioning' do
+
+    it 'displays the current version' do
+      Klipp.version
+      should include Klipp::VERSION
     end
 
   end

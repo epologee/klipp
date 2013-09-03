@@ -1,8 +1,8 @@
+require 'klipp/buffered_output'
 require 'klipp/version'
-require 'klipp/template'
-require 'klipp/token'
-require 'klipp/command'
 require 'klipp/configuration'
+require 'klipp/token'
+require 'klipp/template'
 require 'klipp/parameter_list'
 
 module Klipp
@@ -27,6 +27,8 @@ module Klipp
         prepare @params.first
       when 'list'
         list
+      when 'version'
+        version
       when nil
         raise HelpRequest.new('Use one of the commands below to start with klipp.', false, true)
       else
@@ -35,6 +37,10 @@ module Klipp
 
   rescue Exception => e
     display_exception e
+  end
+
+  def self.version
+    buffer_puts Klipp::VERSION
   end
 
   def self.list
@@ -65,19 +71,18 @@ class HelpRequest < StandardError
   def message
     if @unknown
       "[!] #{super.to_s}".red+"\n\n#{commands}"
-    elsif super.to_s.length
-      "#{@show_title ? title+"\n\n" : ''}"+"[?] #{super.to_s}".yellow+"\n\n#{commands}"
     else
-      "#{@show_title ? title+"\n\n" : ''}#{commands}"
+      "#{@show_title ? title+"\n\n" : ''}"+"[?] #{super.to_s}".yellow+"\n\n#{commands}"
     end
   end
 
   def title
-    "\033[1mKlipp\033[22m, Xcode templates for the rest of us."
+    "\033[1mKlipp\033[22m, Xcode templates for the rest of us. Version: #{Klipp::VERSION}"
   end
 
   def commands
     commands = [
+        version: 'Display the Klipp version number.',
         list: 'List all available klipp templates.',
         prepare: 'Prepare a .klippfile to edit in your favorite text editor.',
         create: 'Create a project based on the template name or .klippfile in the current directory'

@@ -8,9 +8,9 @@ module Klipp
       self - options
     end
 
-    def splice_option(name)
-      !!delete(name)
-    end
+    #def splice_option(name)
+    #  !!delete(name)
+    #end
 
     def shift_argument
       (arg = arguments[0]) && delete(arg)

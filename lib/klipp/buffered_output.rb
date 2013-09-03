@@ -14,10 +14,4 @@ module BufferedOutput
       self.output.puts output
     end
   end
-
-  module InstanceMethods
-    def buffer_puts(output)
-      self.class.output.puts output
-    end
-  end
 end
