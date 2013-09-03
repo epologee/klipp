@@ -39,9 +39,14 @@ describe Klipp do
       Klipp.route *%w[list]
     end
 
-    it 'routes version' do
+    it 'routes `version`' do
       Klipp.expects(:version)
       Klipp.route *%w[version]
+    end
+
+    it 'routes `create``' do
+      Klipp.expects(:create)
+      Klipp.route *%w[create]
     end
 
   end
