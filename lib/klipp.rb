@@ -51,9 +51,9 @@ module Klipp
 
     raise "No templates found. Create a template directory and .yml file in #{Klipp::Configuration.templates_dir}" unless files.length > 0
 
-    buffer_puts("Available templates:\n\n")
+    buffer_puts("Available templates for use with #{"klipp prepare".yellow} or #{"klipp create".yellow}:\n\n")
     files.each do |file|
-      buffer_puts("  + #{File.basename(file, '.*').green}")
+      buffer_puts("  * #{File.basename(file, '.*').green}")
     end
   end
 
@@ -99,7 +99,7 @@ class HelpRequest < StandardError
   def commands
     commands = [
         version: 'Display the Klipp version number.',
-        list: 'List all available klipp templates.',
+        list: "List all available klipp templates in #{Klipp::Configuration.templates_dir}",
         prepare: 'Prepare a .klippfile to edit in your favorite text editor.',
         create: 'Create a project based on the template name or .klippfile in the current directory'
     ]
