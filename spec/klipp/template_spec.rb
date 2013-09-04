@@ -19,6 +19,10 @@ describe Klipp::Template do
       Klipp::Template.new(@templates_dir, 'Example').should be_a Klipp::Template
     end
 
+    xit 'validates the template yml' do
+      true.should eq false
+    end
+
     context 'with a template object' do
 
       before do

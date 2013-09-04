@@ -15,6 +15,7 @@ module Klipp
       help = exception
     else
       help = HelpRequest.new exception.message, true
+      help.set_backtrace(exception.backtrace)
     end
 
     buffer_puts help.message
@@ -70,7 +71,7 @@ module Klipp
     if template_name
       klippfile = File.join(Dir.pwd, "#{template_name}.klippfile")
     else
-      klippfile = Dir.glob(Dir.pwd, '*.klippfile').first
+      klippfile = Dir.glob(File.join(Dir.pwd, '*.klippfile')).first
       template_name = File.basename(klippfile, File.extname(klippfile)) if klippfile
     end
 
@@ -107,7 +108,7 @@ class HelpRequest < StandardError
 
   def message
     if @unknown
-      "[!] #{super.to_s}".red+"\n\n#{commands}"
+      "[!] #{super.to_s}".red+"\n\n#{commands}\n\n#{self.backtrace.join("\n")}"
     else
       "#{@show_title ? title+"\n\n" : ''}"+"[?] #{super.to_s}".yellow+"\n\n#{commands}"
     end

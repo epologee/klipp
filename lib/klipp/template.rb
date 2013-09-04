@@ -41,7 +41,7 @@ module Klipp
 
     def replace_tokens(string_with_tokens, delimiter='XX')
       replaced = string_with_tokens
-      @tokens.each { |name, t| replaced.gsub!(delimiter+name+delimiter, t.value || '') }
+      @tokens.each { |name, t| replaced.gsub!(delimiter+name+delimiter, t.value ? t.value.to_s : '') }
       replaced
     end
 

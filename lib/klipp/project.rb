@@ -1,4 +1,5 @@
 require 'ptools'
+require 'fileutils'
 
 module Klipp
 

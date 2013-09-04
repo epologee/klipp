@@ -18,6 +18,9 @@ module Klipp
       @default = parsed['default']
       @validate = parsed['validate']
       @not_valid_response = parsed['not_valid_response']
+
+    rescue Exception => e
+      p token_yml
     end
 
     def ask_for_input(terminal = nil)
