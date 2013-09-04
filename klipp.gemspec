@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Klipp::VERSION
   spec.authors       = ['Eric-Paul Lecluse']
   spec.email         = %w(e@epologee.com)
-  spec.description   = 'New projects.'
-  spec.summary       = 'New projects with style.'
-  spec.homepage      = ''
+  spec.description   = 'Klipp, Xcode templates for the rest of us.'
+  spec.summary       = "Klipp is a command line gem for creating new (Xcode) projects from existing templates. Unlike Apple's private plist-based templating system, Klipp takes an existing Xcode project and creates a new project by copying and modifying an existing template project by your own specifications."
+  spec.homepage      = 'https://github.com/epologee/klipp'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
