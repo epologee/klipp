@@ -4,32 +4,31 @@ require 'erb'
 module Klipp
 
   class Template
-    attr_reader :tokens
+    attr_reader :tokens, :name
 
     def initialize path, name
       @name = name
+      raise 'Attempted to initialize template without name' unless name
+
       full_path = File.join(path, "#{name}.yml")
-      raise "Unknown template name: #{name}" unless File.exists? full_path
-      yaml_tokens = YAML.load ERB.new(File.read(full_path)).result
-      @tokens = yaml_tokens.map { |yaml_token| Klipp::Token.new(yaml_token) }
+      raise "Unknown template name: #{name} (in template directory #{path})" unless File.exists?(full_path)
+      yaml_tokens = YAML.load(File.read(full_path))
+
+      @tokens = Hash[yaml_tokens.map { |token_name, values| [token_name, Klipp::Token.new(values)] }]
+    end
+
+    def [](name)
+      @tokens[name].value
+    end
+
+    def []=(name, value)
+      @tokens[name].value=value
     end
 
     def load_klippfile(klippfile)
-      yaml = YAML.load ERB.new(File.read(klippfile)).result
-
-      tokens = @tokens.dup
-      yaml.each do |name, value|
-        matching_token = tokens.detect { |t| t.name == name }
-        raise "Unknown token found named #{name}" unless matching_token
-        matching_token.value = value
-        tokens.delete(matching_token)
-      end
-
-      raise "No values found for tokens: #{tokens.map{|t|t.name}}" if tokens.length > 0
-    end
-
-    def value_for_token(name)
-      @tokens.detect { |t| t.name == name }.value
+      yaml = YAML.load(File.read(klippfile))
+      raise 'Tokens not matching' unless yaml.keys == @tokens.keys
+      yaml.each { |name, value| self[name] = value }
     end
 
     def klippfile
@@ -37,7 +36,13 @@ module Klipp
     end
 
     def generated_klippfile
-      @tokens.map { |t| "#{t.name}:\n# #{t.subtitle}"}.join("\n\n")
+      @tokens.map { |name, t| "#{name}:\n# #{t.subtitle}" }.join("\n\n")
+    end
+
+    def replace_tokens(string_with_tokens, delimiter='XX')
+      replaced = string_with_tokens
+      @tokens.each { |name, t| replaced.gsub!(delimiter+name+delimiter, t.value || '') }
+      replaced
     end
 
   end

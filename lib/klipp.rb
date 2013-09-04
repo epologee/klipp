@@ -4,6 +4,7 @@ require 'klipp/configuration'
 require 'klipp/token'
 require 'klipp/template'
 require 'klipp/parameter_list'
+require 'klipp/project'
 require 'colorize'
 
 module Klipp
@@ -51,7 +52,7 @@ module Klipp
 
     raise "No templates found. Create a template directory and .yml file in #{Klipp::Configuration.templates_dir}" unless files.length > 0
 
-    buffer_puts("Available templates for use with #{"klipp prepare".yellow} or #{"klipp create".yellow}:\n\n")
+    buffer_puts("Available templates for use with #{'klipp prepare'.yellow} or #{'klipp create'.yellow}:\n\n")
     files.each do |file|
       buffer_puts("  * #{File.basename(file, '.*').green}")
     end
@@ -66,7 +67,27 @@ module Klipp
   end
 
   def self.create(template_name)
+    if template_name
+      klippfile = File.join(Dir.pwd, "#{template_name}.klippfile")
+    else
+      klippfile = Dir.glob(Dir.pwd, '*.klippfile').first
+      template_name = File.basename(klippfile, File.extname(klippfile)) if klippfile
+    end
 
+    template = Klipp::Template.new(Klipp::Configuration.templates_dir, template_name)
+
+    if klippfile
+      # load token values from klippfile
+      template.load_klippfile klippfile
+    elsif template_name
+      # ask for token values with highline
+      raise "Direct user input not yet supported. Use #{'klipp prepare'.yellow} to prepare a .klippfile"
+    else
+      raise "Add a template name to the `create` command, or use #{'klipp prepare'.yellow} to prepare a .klippfile"
+    end
+
+    project = Klipp::Project.new(template)
+    project.create
   end
 
   private

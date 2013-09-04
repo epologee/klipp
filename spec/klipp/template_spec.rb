@@ -39,7 +39,7 @@ describe Klipp::Template do
 
       it 'loads the token values from a valid Klippfile' do
         @template.load_klippfile File.join(@klipps_dir, 'Example.klippfile')
-        @template.value_for_token('PARTNER').should eq 'The Prestigeous Partner'
+        @template['PARTNER'].should eq 'The Prestigeous Partner'
       end
 
       it 'raises an error when the Klippfile is malformed' do
@@ -52,6 +52,21 @@ describe Klipp::Template do
 
       it 'raises an error when the Klippfile contains too few tokens' do
         expect { @template.load_klippfile File.join(@klipps_dir, 'LackingExample.klippfile') }.to raise_error RuntimeError
+      end
+
+    end
+
+    context 'with a template object and token values' do
+
+      before do
+        @template = Klipp::Template.new(@templates_dir, 'Example')
+        @template['CLASS_PREFIX'] = 'PJX'
+        @template['PROJECT_ID'] = 'ProjectX'
+        @template['PROJECT_TITLE'] = 'Project X'
+      end
+
+      it 'replaces delimited tokens in a string' do
+        @template.replace_tokens('XXCLASS_PREFIXXX XXPROJECT_IDXX XXPROJECT_TITLEXX').should eq 'PJX ProjectX Project X'
       end
 
     end

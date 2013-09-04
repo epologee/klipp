@@ -9,10 +9,6 @@ describe Klipp::Token do
       @token = Klipp::Token.new read_fixture('klipps/single-token.yml')
     end
 
-    it 'has a token' do
-      @token.name.should eq 'PARTNER'
-    end
-
     it 'has a title' do
       @token.title.should eq 'Partner name'
     end
@@ -80,7 +76,7 @@ describe Klipp::Token do
       @token.value.should eq 'Qwerty'
     end
 
-    def simulate_input value = ''
+    def simulate_input(value = '')
       @input << value << "\n"
       @input.rewind
     end

@@ -101,6 +101,37 @@ describe Klipp do
 
   end
 
+  describe 'when creating' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns File.join(__dir__, 'fixtures')
+      @example_klippfile_contents = File.read(File.join(__dir__, 'fixtures', 'klipps', 'Example.klippfile'))
+    end
+
+    it 'calls create on a project with a named template' do
+      mock_project = mock
+      mock_project.expects(:create)
+      Klipp::Project.expects(:new).with(is_a(Klipp::Template)).returns(mock_project)
+      File.stubs(:read).with(anything).returns( @example_klippfile_contents )
+      Klipp.create('Example')
+    end
+
+    it 'calls create on a project with an inferred template' do
+      Dir.expects(:glob).with(anything, anything).returns %w(Example.klippfile)
+      mock_project = mock
+      mock_project.expects(:create)
+      Klipp::Project.expects(:new).with(is_a(Klipp::Template)).returns(mock_project)
+      File.stubs(:read).with(anything).returns( @example_klippfile_contents )
+      Klipp.create nil
+    end
+
+    it 'raises an error when the template name can\'t be inferred' do
+      Dir.expects(:glob).with(anything, anything).returns []
+      expect { Klipp.create nil }.to raise_error RuntimeError
+    end
+
+  end
+
   def subject
     @output.string
   end
