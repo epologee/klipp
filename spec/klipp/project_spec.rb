@@ -16,10 +16,29 @@ describe Klipp::Project do
 
     it 'copies files while replacing paths' do
       @project.create
-      File.exists?(File.join Dir.pwd, 'ProjectX').should be true
-      File.exists?(File.join Dir.pwd, 'ProjectX/BinaryFile.png').should be true
-      File.exists?(File.join Dir.pwd, 'ProjectX/PJXPrefixedFileInDirectory.txt').should be true
-      File.exists?(File.join Dir.pwd, 'ProjectX/PJXPrefixedFile.txt').should be true
+      File.exists?(File.join Dir.pwd, 'Example', 'ProjectX').should be true
+      File.exists?(File.join Dir.pwd, 'Example', 'PJXPrefixedFile.txt').should be true
+      File.exists?(File.join Dir.pwd, 'Example', 'ProjectX', 'BinaryFile.png').should be true
+      File.exists?(File.join Dir.pwd, 'Example', 'ProjectX', 'PJXPrefixedFileInDirectory.txt').should be true
+    end
+
+    it 'replaces file contens while transferring' do
+      @project.create
+      File.read(File.join Dir.pwd, 'Example', 'PJXPrefixedFile.txt').should include 'Regular content stays untouched'
+      File.read(File.join Dir.pwd, 'Example', 'PJXPrefixedFile.txt').should include 'Tokens are replaced: ProjectX'
+      File.read(File.join Dir.pwd, 'Example', 'PJXPrefixedFile.txt').should include 'Even if it\'s in the middle of something else BlablablaProjectXBlabla'
+    end
+
+    it 'copies binary files without replacing contents' do
+      @project.create
+      template_png = File.join(Klipp::Configuration.templates_dir, 'Example', 'XXPROJECT_IDXX', 'BinaryFile.png')
+      transferred_png = File.join(Dir.pwd, 'Example', 'ProjectX', 'BinaryFile.png')
+      FileUtils.compare_file(template_png, transferred_png).should be true
+    end
+
+    it 'halts transfer if the directory already exists' do
+      FileUtils.mkdir_p File.join(Dir.pwd, 'Example')
+      expect { @project.create }.to raise_error RuntimeError
     end
 
   end
