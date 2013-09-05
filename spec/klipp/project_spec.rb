@@ -14,8 +14,9 @@ describe Klipp::Project do
       Dir.stubs(:pwd).returns(Dir.mktmpdir)
     end
 
-    it 'copies files while replacing paths' do
+    it 'copies files while replacing paths, including hidden files' do
       @project.create
+      File.exists?(File.join Dir.pwd, 'Example', '.hiddenfile').should be true
       File.exists?(File.join Dir.pwd, 'Example', 'ProjectX').should be true
       File.exists?(File.join Dir.pwd, 'Example', 'PJXPrefixedFile.txt').should be true
       File.exists?(File.join Dir.pwd, 'Example', 'ProjectX', 'BinaryFile.png').should be true

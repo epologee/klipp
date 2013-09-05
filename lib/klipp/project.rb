@@ -17,7 +17,7 @@ module Klipp
 
       raise "Target directory already exists. Klipp will not overwrite your project: #{target_template_dir}" if File.exists? target_template_dir
 
-      @source_files = Dir.glob(File.join(source_template_dir, '**', '*'))
+      @source_files = Dir.glob(File.join(source_template_dir, '**', '*'), File::FNM_DOTMATCH)
       @source_files.each do |source_file|
         transfer_file source_file, target_file(source_template_dir, source_file, target_template_dir)
       end
