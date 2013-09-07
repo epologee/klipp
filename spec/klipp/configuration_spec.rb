@@ -21,4 +21,12 @@ describe Klipp::Configuration do
 
   end
 
+  context 'with root dir pointing to fixtures' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(File.dirname(__dir__), 'fixtures'))
+    end
+
+  end
+
 end

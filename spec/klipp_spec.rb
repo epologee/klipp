@@ -38,6 +38,11 @@ describe Klipp do
       Klipp.route(*%w[project]).should eq 0
     end
 
+    it 'routes template with exit code 0' do
+      Template.expects(:route)
+      Klipp.route(*%w[template]).should eq 0
+    end
+
   end
 
 

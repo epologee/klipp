@@ -14,7 +14,7 @@ describe Project do
     end
 
     it 'routes init' do
-      Project.expects(:cli_init).with('Example')
+      Project.expects(:cli_init).with(['Example'])
       Project.route(*%w[init Example])
     end
 

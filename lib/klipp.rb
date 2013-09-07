@@ -1,11 +1,10 @@
 require 'formatador'
 require 'colorize'
 require 'project'
+require 'template'
 require 'klipp/configuration'
 require 'klipp/version'
 require 'klipp/parameter_list'
-require 'template/spec'
-require 'template/token'
 
 module Klipp
 
@@ -15,6 +14,8 @@ module Klipp
     case (command)
       when 'project'
         Project.route(*params)
+      when 'template'
+        Template.route(*params)
       when nil
         raise 'Missing klipp command'
       else

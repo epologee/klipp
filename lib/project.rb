@@ -5,7 +5,7 @@ module Project
     command = params.shift_argument
     case command
       when 'init'
-        cli_init(*params)
+        cli_init(params)
       when nil
         raise 'Missing project command'
       else
@@ -13,7 +13,7 @@ module Project
     end
   end
 
-  def self.cli_init(params)
+  def self.cli_init(params=[])
 
   end
 
