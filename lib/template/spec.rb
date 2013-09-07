@@ -6,9 +6,8 @@ module Template
     def initialize &config
       @tokens = Hash[]
       raise 'Spec configuration requires a block parameter' unless block_given?
+      defaults
       config.yield(self)
-      (self['BLANK'] = Template::Token.new('BLANK')).hidden = true
-
       validate
     end
 
@@ -26,6 +25,20 @@ module Template
     def []=(name, token)
       raise "Redeclaring tokens not allowed: #{name}" if @tokens[name]
       @tokens[name] = token
+    end
+
+    def defaults
+      blank = self[:BLANK] = Template::Token.new :BLANK
+      blank.hidden = true
+      blank.value = ''
+
+      date = self[:DATE] = Template::Token.new :DATE
+      date.hidden = true
+      date.value = DateTime.now.strftime('%F')
+
+      year = self[:YEAR] = Template::Token.new :YEAR
+      year.hidden = true
+      year.value = DateTime.now.strftime('%Y')
     end
 
     def validate

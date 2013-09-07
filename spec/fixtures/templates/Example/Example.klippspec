@@ -1,5 +1,6 @@
 Template::Spec.new do |s|
   s.name = 'Example'
+  s.afterwards = 'pod install'
 
   s.token :PROJECT_ID do |t|
     t.comment = "Project id (e.g. 'FCUtrechtFancal')"

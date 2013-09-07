@@ -27,7 +27,7 @@ describe Template::Spec do
     it 'raises an error when reconfiguring a token, like the BLANK token' do
       (expect do
         Template::Spec.new do |spec|
-          spec.token 'BLANK' do |t|
+          spec.token :BLANK do |t|
             t.name
           end
         end
@@ -60,26 +60,29 @@ describe Template::Spec do
     end
 
     it 'has a token hash' do
-      @template['PROJECT_ID'] = Template::Token.new('PROJECT_ID')
-      @template['PROJECT_ID'].should be_an_instance_of(Template::Token)
+      @template[:PROJECT_ID] = Template::Token.new(:PROJECT_ID)
+      @template[:PROJECT_ID].should be_an_instance_of(Template::Token)
     end
 
     it 'creates a token by name' do
       yielded_token = :not_a_token
-      @template.token('PROJECT_ID') { |t| yielded_token = t }
-      yielded_token.name.should eq 'PROJECT_ID'
-    end
-
-    it 'configures a token in a block' do
-      yielded_token = :not_a_token
-      @template.token('PROJECT_ID') { |t|
-        yielded_token = t
-      }
-      yielded_token.name.should eq 'PROJECT_ID'
+      @template.token(:PROJECT_ID) { |t| yielded_token = t }
+      yielded_token.name.should eq :PROJECT_ID
     end
 
     it 'has a blank token' do
-      @template['BLANK'].hidden.should eq true
+      @template[:BLANK].hidden.should eq true
+      @template[:BLANK].value.should eq ''
+    end
+
+    it 'has a date token' do
+      @template[:DATE].hidden.should eq true
+      @template[:DATE].value.should eq DateTime.now.strftime('%F')
+    end
+
+    it 'has a year token' do
+      @template[:YEAR].hidden.should eq true
+      @template[:YEAR].value.should eq '2013'
     end
 
   end
