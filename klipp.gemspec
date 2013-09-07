@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'highline'
   spec.add_development_dependency 'ptools'
-  spec.add_development_dependency 'colored'
+  spec.add_development_dependency 'formatador'
 end

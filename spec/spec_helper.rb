@@ -15,3 +15,12 @@ RSpec.configure do |config|
   config.mock_framework = :mocha
   config.order = 'random'
 end
+
+def capture_stdout
+  old_stdout = $stdout
+  new_stdout = StringIO.new
+  $stdout = new_stdout
+  yield
+  $stdout = old_stdout
+  new_stdout.string
+end
