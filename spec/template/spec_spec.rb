@@ -23,9 +23,19 @@ describe Template::Spec do
       Template::Spec.any_instance.expects(:validate)
       Template::Spec.new {}
     end
+
+    it 'raises an error when reconfiguring a token, like the BLANK token' do
+      (expect do
+        Template::Spec.new do |spec|
+          spec.token 'BLANK' do |t|
+            t.name
+          end
+        end
+      end).to raise_error RuntimeError
+    end
   end
 
-  context 'with an invalid configuration' do
+  context 'with an invalid spec' do
 
     it 'invalidates' do
       Template::Spec.any_instance.expects(:invalidate)

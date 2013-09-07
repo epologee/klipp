@@ -24,6 +24,7 @@ module Template
     end
 
     def []=(name, token)
+      raise "Redeclaring tokens not allowed: #{name}" if @tokens[name]
       @tokens[name] = token
     end
 
