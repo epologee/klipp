@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'klipp'
+
+Klipp::Configuration.auto_create_dirs = true
+Klipp.route(*ARGV)
