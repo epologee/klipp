@@ -15,29 +15,7 @@ Execute and read the usage instructions:
 
 ## Usage
 
-Klipp creates a template repository in your home directory, at ~/.klipp/templates
-A template consists of a directory and an accompanying Yaml file, e.g.:
-
-    TemplateA
-	TemplateA.yml
-
-Once you have templates like these present, you can prepare a new instance of that project by executing:
-
-    $ klipp prepare TemplateA
-
-This will create a TemplateA.klippfile in your current directory, for you to edit with your favorite text editor.
-From there, customize your project and when happy with the results, run:
-
-    $ klipp create
-
-This will create a new directory called TemplateA, that contains your new project.
-	
-## Known issues
-
-* Creating templates is done manually, this will be automated
-* Errors while parsing the .klippfile are not yet handled gracefully
-* Highline support for on-the-fly creation of new projects is not yet enabled
-* The root of newly created projects carries the same name as the template, this will be adjustable.
+    This branch is under heavy development, this readme is NOT accurate. Sorry 'bout that!
 
 ## Contributing
 
