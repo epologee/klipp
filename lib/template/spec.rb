@@ -26,7 +26,12 @@ module Template
     end
 
     def validate
+      msg = 'Template configuration invalid: '
+      invalidate msg+'missing name' unless @name && @name.length
+    end
 
+    def invalidate(message)
+      raise message
     end
   end
 
