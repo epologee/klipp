@@ -1,6 +1,7 @@
 require 'formatador'
 require 'colorize'
 require 'project'
+require 'klipp/configuration'
 require 'klipp/version'
 require 'klipp/parameter_list'
 require 'template/spec'

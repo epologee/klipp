@@ -2,5 +2,5 @@
 
 require 'klipp'
 
-# Klipp::Configuration.auto_create_dirs = true
+Klipp::Configuration.auto_create_dirs = true
 exit Klipp.route(*ARGV)
