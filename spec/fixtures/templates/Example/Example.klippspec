@@ -1,25 +1,25 @@
 Template::Spec.new do |s|
   s.name = 'Example'
 
-  s.token 'PROJECT_ID' do |t|
-    t.comment = "Project id (e.g. 'FCUtrechtAgenda')"
+  s.token :PROJECT_ID do |t|
+    t.comment = "Project id (e.g. 'FCUtrechtFancal')"
     t.validate = /^[A-Z][A-Za-z0-9]{2,}$/
     t.validation_hint = 'At least three characters long, no spaces, start with a capital character'
   end
 
-  s.token 'PARTNER' do |t|
+  s.token :PARTNER do |t|
     t.comment = "Partner name (e.g. 'FC Utrecht')"
     t.validate = /^[A-Z][A-Za-z0-9 ]{2,}$/
     t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
   end
 
-  s.token 'PROJECT_TITLE' do |t|
+  s.token :PROJECT_TITLE do |t|
     t.comment = "Project title (e.g. 'FC Utrecht Agenda')"
     t.validate = /^[A-Z][A-Za-z0-9 ]{2,}$/
     t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
   end
 
-  s.token 'CLASS_PREFIX' do |t|
+  s.token :CLASS_PREFIX do |t|
     t.comment = "Class prefix (e.g. 'FCU')"
     t.validate = /^[A-Z][A-Z0-9]{2,}$/
     t.validation_hint = 'All caps, at least three, starting with an alphabetical character'
