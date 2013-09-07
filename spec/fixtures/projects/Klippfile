@@ -1,19 +1,23 @@
 template 'Example' do |project|
 
-  # Project id (e.g. 'FCUtrechtFancal'):
+  # Project title (e.g. 'Amazing Application')
+  # At least three characters long, start with a capital character, may contain spaces
+  project[:PROJECT_TITLE] = "Amazing Application"
+
+  # Project id (e.g. 'AmazingApp')
   # At least three characters long, no spaces, start with a capital character
-  project[:PROJECT_ID] = "FCUtrechtFancal"
+  project[:PROJECT_ID] = "AmazingApp"
 
-  # Partner name (e.g. 'FC Utrecht'):
+  # Bundle id (e.g. 'com.acme.amazingapp')
+  # Reverse domain notation, lower case, no spaces
+  project[:BUNDLE_ID] = "com.acme.amazingapp"
+
+  # Organization name (e.g. 'ACME')
   # At least three characters long, start with a capital character, may contain spaces
-  project[:PARTNER] = ""
+  project[:ORGANIZATION_NAME] = "ACME"
 
-  # Project title (e.g. 'FC Utrecht Agenda'):
-  # At least three characters long, start with a capital character, may contain spaces
-  project[:PROJECT_TITLE] = ""
-
-  # Class prefix (e.g. 'FCU'):
+  # Class prefix (e.g. 'AMZ')
   # All caps, at least three, starting with an alphabetical character
-  project[:CLASS_PREFIX] = ""
+  project[:CLASS_PREFIX] = "AMZ"
 
 end

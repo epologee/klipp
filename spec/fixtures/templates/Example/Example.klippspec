@@ -1,28 +1,35 @@
 Template::Spec.new do |s|
   s.name = 'Example'
-  s.afterwards = 'pod install'
+  s.post_action = 'pod install'
 
-  s.token :PROJECT_ID do |t|
-    t.comment = "Project id (e.g. 'FCUtrechtFancal')"
-    t.validate = /^[A-Z][A-Za-z0-9]{2,}$/
-    t.validation_hint = 'At least three characters long, no spaces, start with a capital character'
-  end
-
-  s.token :PARTNER do |t|
-    t.comment = "Partner name (e.g. 'FC Utrecht')"
+  s.token :PROJECT_TITLE do |t|
+    t.comment = "Project title (e.g. 'Amazing Application')"
     t.validate = /^[A-Z][A-Za-z0-9 ]{2,}$/
     t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
   end
 
-  s.token :PROJECT_TITLE do |t|
-    t.comment = "Project title (e.g. 'FC Utrecht Agenda')"
+  s.token :PROJECT_ID do |t|
+    t.comment = "Project id (e.g. 'AmazingApp')"
+    t.validate = /^[A-Z][A-Za-z0-9]{2,}$/
+    t.validation_hint = 'At least three characters long, no spaces, start with a capital character'
+  end
+
+  s.token :BUNDLE_ID do |t|
+    t.comment = "Bundle id (e.g. 'com.acme.amazingapp')"
+    t.validate = /^[a-z0-9.]{3,}$/
+    t.validation_hint = 'Reverse domain notation, lower case, no spaces'
+  end
+
+  s.token :ORGANIZATION_NAME do |t|
+    t.comment = "Organization name (e.g. 'ACME')"
     t.validate = /^[A-Z][A-Za-z0-9 ]{2,}$/
     t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
   end
 
   s.token :CLASS_PREFIX do |t|
-    t.comment = "Class prefix (e.g. 'FCU')"
+    t.comment = "Class prefix (e.g. 'AMZ')"
     t.validate = /^[A-Z][A-Z0-9]{2,}$/
     t.validation_hint = 'All caps, at least three, starting with an alphabetical character'
   end
+  
 end

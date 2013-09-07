@@ -1,0 +1,10 @@
+platform :ios, "6.0"
+
+target "XXPROJECT_TITLEXX" do
+	pod 'AFNetworking'
+end
+
+target "XXPROJECT_TITLEXXTests" do
+	pod 'OCMockito'
+end
+

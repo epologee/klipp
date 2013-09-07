@@ -1,3 +1,0 @@
-Regular content stays untouched
-Tokens are replaced: XXPROJECT_IDXX
-Even if it's in the middle of something else BlablablaXXPROJECT_IDXXBlabla
