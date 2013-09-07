@@ -68,6 +68,10 @@ describe Template::Spec do
       yielded_token.name.should eq 'PROJECT_ID'
     end
 
+    it 'has a blank token' do
+      @template['BLANK'].hidden.should eq true
+    end
+
   end
 
 end

@@ -7,6 +7,8 @@ module Template
       @tokens = Hash[]
       raise 'Spec configuration requires a block parameter' unless block_given?
       config.yield(self)
+      (self['BLANK'] = Template::Token.new('BLANK')).hidden = true
+
       validate
     end
 
