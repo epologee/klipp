@@ -26,8 +26,14 @@ describe Template do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
     end
 
+    it 'routes list' do
+      capture_stdout {
+        Template.route(*%w[list])
+      }.should include 'Example'
+    end
+
     it 'lists the available templates, like Example' do
-      Template.list.should include({name: 'Example', repo: 'template-repository'})
+      Template.list.should include({ name: 'Example', repo: 'template-repository' })
     end
 
   end
