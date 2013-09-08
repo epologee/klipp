@@ -1,6 +1,6 @@
 Template::Spec.new do |s|
-  s.name = 'Example'
-  s.post_action = 'pod install'
+  s.name = 'BadExample'
+  s.lalala = 'pod install'
 
   s.token :PROJECT_TITLE do |t|
     t.comment = "Project title (e.g. 'Amazing Application')"

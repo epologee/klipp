@@ -59,6 +59,11 @@ describe Template::Spec do
       @template.name.should eq 'Project X'
     end
 
+    it 'has a post-action' do
+      @template.post_action = 'pod install'
+      @template.post_action.should eq 'pod install'
+    end
+
     it 'has a token hash' do
       @template[:PROJECT_ID] = Template::Token.new(:PROJECT_ID)
       @template[:PROJECT_ID].should be_an_instance_of(Template::Token)
@@ -86,5 +91,25 @@ describe Template::Spec do
     end
 
   end
+
+  context 'when loading a klippspec' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(File.dirname(__dir__), 'fixtures'))
+    end
+
+    it 'loads a spec from a file' do
+      klippspec = File.join(Klipp::Configuration.root_dir, 'template-repository', 'Example', 'Example.klippspec')
+      Template::Spec.from_file(klippspec).should be_an_instance_of Template::Spec
+    end
+
+    it 'raises an error when loading an invalid klippspec' do
+      klippspec = File.join(Klipp::Configuration.root_dir, 'template-repository', 'BadExample', 'BadExample.klippspec')
+      File.exists?(klippspec).should be true
+      expect { Template::Spec.from_file(klippspec) }.to raise_error RuntimeError
+    end
+
+  end
+
 
 end

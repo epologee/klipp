@@ -1,7 +1,20 @@
 module Template
 
   class Spec
-    attr_accessor :name
+    attr_accessor :name, :post_action
+
+    def self.from_file(path)
+      string = IO.read path if File.exists? path
+      from_string(string, path)
+    end
+
+    def self.from_string(string, path)
+      begin
+        eval(string, nil, path)
+      rescue Exception => e
+        raise "Invalid #{File.basename(path)}:\n#{e.backtrace.join("\n")}"
+      end
+    end
 
     def initialize &config
       @tokens = Hash[]
