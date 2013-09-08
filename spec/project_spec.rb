@@ -27,7 +27,7 @@ describe Project do
     end
 
     it 'without template name raises error' do
-      expect { Project.cli_init([]) }.to raise_error RuntimeError
+      expect { Project.cli_init([]) }.to raise_error Klipp::Hint
     end
 
     context 'without an existing Klippfile' do

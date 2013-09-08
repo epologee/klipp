@@ -17,12 +17,12 @@ module Klipp
     }
     case command
       when nil
-        raise Klipp::Hint.new "Add a command to $ klipp [#{commands.keys.join('|')}]"
+        raise Klipp::Hint.new "Add a command to `klipp [#{commands.keys.join('|')}]`"
       else
         if commands[command.to_sym]
           commands[command.to_sym].call
         else
-          raise "Unknown klipp command: #{command}"
+          raise "Unknown command `klipp #{command}`"
         end
     end
     0 # exit code

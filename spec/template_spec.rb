@@ -40,12 +40,7 @@ describe Template do
       Template.path_for_template('Example').should eq File.join(__dir__, 'fixtures', 'template-repository', 'Example', 'Example.klippspec')
     end
 
-    it 'returns nil if a template doesn\'t exist' do
-      Template.path_for_template('Non-existing').should be nil
-    end
-
     it 'raises error if a template doesn\'t exist' do
-      pending 'should it raise, or just return nil?'
       expect { Template.path_for_template('Non-existing') }.to raise_error RuntimeError
     end
 

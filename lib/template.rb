@@ -11,19 +11,19 @@ module Template
     }
     case command
       when nil
-        raise Klipp::Hint.new "Add a command to $ klipp [#{commands.keys.join('|')}]"
+        raise Klipp::Hint.new "Add a command to `klipp template [#{commands.keys.join('|')}]`"
       else
         if commands[command.to_sym]
           commands[command.to_sym].call
         else
-          raise "Unknown klipp command: #{command}"
+          raise "Unknown command `klipp template #{command}`"
         end
     end
   end
 
   def self.cli_list(params=[])
     list.each do |template|
-      Formatador.display_line "  * [green]#{template[:name].ljust(16)}[/] (#{template[:repo]})"
+      Formatador.display_line "* #{template[:repo]}/[green]#{template[:name].ljust(16)}[/]"
     end
   end
 
@@ -40,7 +40,8 @@ module Template
 
   def self.path_for_template(template)
     specs = Dir.glob(File.join(Klipp::Configuration.root_dir, '**', "#{template}.klippspec"))
-    specs.first if specs && specs.count
+    raise "Unknown template: #{template}" unless specs && specs.count > 0
+    specs.first
   end
 
 end

@@ -8,7 +8,7 @@ module Project
     }
     case command
       when nil
-        raise Klipp::Hint.new "Add a command to $ klipp project [#{commands.keys.join('|')}]"
+        raise Klipp::Hint.new "Add a command to `klipp project [#{commands.keys.join('|')}]`"
       else
         if commands[command.to_sym]
           commands[command.to_sym].call
@@ -21,7 +21,7 @@ module Project
   def self.cli_init(params=[])
     params = Klipp::ParameterList.new(params)
     template = params.shift_argument
-    raise 'Template name required for project init' unless template
+    raise Klipp::Hint.new("Add a template name to `klipp project init [template]`. Use `klipp template list` to see your options.") unless template
 
     spec = Template::Spec.from_file Template.path_for_template(template)
     filename = 'Klippfile'
