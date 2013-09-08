@@ -47,6 +47,14 @@ describe Template::Spec do
       expect { @spec.spec('') }.to raise_error RuntimeError
     end
 
+    it 'rescues and re-raises errors from the config block' do
+      expect { @spec.spec('Example') { |s| s.lala = 5 } }.to raise_error RuntimeError, /Invalid klippspec configuration/
+    end
+
+    it 'raises errors from klippspec string' do
+      expect { @spec.from_string('lalala', 'fake/path') }.to raise_error RuntimeError, /Error evaluating spec/
+    end
+
   end
 
   context 'with a valid spec' do

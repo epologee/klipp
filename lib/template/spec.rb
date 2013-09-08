@@ -9,15 +9,6 @@ module Template
       spec.from_string(string, path)
     end
 
-    def from_string(string, path)
-      begin
-        eval(string, nil, path)
-      rescue Exception => e
-        raise "Invalid #{File.basename(path)}:\n#{e.backtrace.join("\n")}"
-      end
-      validate
-    end
-
     def initialize
       @tokens = Hash[]
 
@@ -34,10 +25,23 @@ module Template
       year.value = DateTime.now.strftime('%Y')
     end
 
+    def from_string(string, path)
+      begin
+        eval(string, nil, path)
+      rescue Exception => e
+        raise "Error evaluating spec: #{File.basename(path)}:\n#{e.backtrace.join("\n")}"
+      end
+      validate
+    end
+
     # This method is called from the klippspec
     def spec name, &config
       self.name = name
-      config.yield(self) if (block_given?)
+      begin
+        config.yield(self) if (block_given?)
+      rescue Exception => e
+        raise "Invalid klippspec configuration: #{e.message}\n  #{e.backtrace.join("\n  ")}"
+      end
       validate
     end
 
