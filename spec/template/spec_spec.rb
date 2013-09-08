@@ -2,6 +2,38 @@ require 'spec_helper'
 
 describe Template::Spec do
 
+  context 'identifier methods' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(p File.join(File.dirname(__dir__), 'fixtures'))
+    end
+
+    it 'finds the path to a template name' do
+      path = Template::Spec.spec_path_for_identifier('Example')
+      path.should eq File.join(File.dirname(__dir__), 'fixtures', 'template-repository', 'Example', 'Example.klippspec')
+    end
+
+    it 'raises error if a template doesn\'t exist' do
+      expect { Template::Spec.spec_path_for_identifier('Non-existing') }.to raise_error RuntimeError
+    end
+
+    it 'raises error if a template is unambiguous' do
+      expect { Template::Spec.spec_path_for_identifier('Ambiguous') }.to raise_error RuntimeError, /Found multiple templates/
+    end
+
+    it 'finds the path to a template in a specific repo' do
+      path = Template::Spec.spec_path_for_identifier('template-repository/Ambiguous')
+      path.should eq File.join(File.dirname(__dir__), 'fixtures', 'template-repository', 'Ambiguous', 'Ambiguous.klippspec')
+    end
+
+    it 'deducts the template identifier from an unambiguous template name' do
+      path = Template::Spec.spec_path_for_identifier 'Example'
+      hash = Template::Spec.hash_for_spec_path path
+      Template::Spec.hash_to_identifier(hash).should eq 'template-repository/Example'
+    end
+
+  end
+
   context 'with validation disabled' do
     before do
       Template::Spec.any_instance.stubs(:invalidate)
@@ -61,12 +93,12 @@ describe Template::Spec do
 
     before do
       @template = Template::Spec.new
-      @template.spec('Example') { }
+      @template.spec('Example') {}
     end
 
     it 'has a name' do
-      @template.name = 'Project X'
-      @template.name.should eq 'Project X'
+      @template.identifier = 'repo/ProjectX'
+      @template.identifier.should eq 'repo/ProjectX'
     end
 
     it 'has a post-action' do

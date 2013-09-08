@@ -1,4 +1,4 @@
-spec 'Example' do |s|
+spec 'template-repository/Example' do |s|
   s.post_action = 'pod install'
 
   s.token :PROJECT_TITLE do |t|

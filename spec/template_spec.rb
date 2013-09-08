@@ -27,29 +27,12 @@ describe Template do
     end
 
     it 'routes list' do
-      capture_stdout {
-        Template.route(*%w[list])
-      }.should include 'Example'
+      Template.expects(:cli_list)
+      Template.route(*%w[list])
     end
 
     it 'lists the available templates, like Example' do
       Template.list.should include({ name: 'Example', repo: 'template-repository' })
-    end
-
-    it 'finds the path to a template name' do
-      Template.path_for_template('Example').should eq File.join(__dir__, 'fixtures', 'template-repository', 'Example', 'Example.klippspec')
-    end
-
-    it 'raises error if a template doesn\'t exist' do
-      expect { Template.path_for_template('Non-existing') }.to raise_error RuntimeError
-    end
-
-    it 'raises error if a template is unambiguous' do
-      expect { Template.path_for_template('Ambiguous') }.to raise_error RuntimeError, /Found multiple templates/
-    end
-
-    it 'finds the path to a template in a specific repo' do
-      Template.path_for_template('template-repository/Ambiguous').should eq File.join(__dir__, 'fixtures', 'template-repository', 'Ambiguous', 'Ambiguous.klippspec')
     end
 
   end

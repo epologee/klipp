@@ -23,7 +23,7 @@ module Project
     template = params.shift_argument
     raise Klipp::Hint.new("Add a template name to `klipp project init [template]`. Use `klipp template list` to see your options.") unless template
 
-    spec = Template::Spec.from_file Template.path_for_template(template)
+    spec = Template::Spec.from_file Template::Spec.spec_path_for_identifier(template)
     filename = 'Klippfile'
 
     force = params.splice_option('-f')
