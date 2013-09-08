@@ -1,0 +1,5 @@
+spec 'Ambiguous' do |s|
+
+  # Ambiguous in A
+
+end

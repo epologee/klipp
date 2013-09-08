@@ -44,6 +44,14 @@ describe Template do
       expect { Template.path_for_template('Non-existing') }.to raise_error RuntimeError
     end
 
+    it 'raises error if a template is unambiguous' do
+      expect { Template.path_for_template('Ambiguous') }.to raise_error RuntimeError, /Found multiple templates/
+    end
+
+    it 'finds the path to a template in a specific repo' do
+      Template.path_for_template('template-repository/Ambiguous').should eq File.join(__dir__, 'fixtures', 'template-repository', 'Ambiguous', 'Ambiguous.klippspec')
+    end
+
   end
 
 end

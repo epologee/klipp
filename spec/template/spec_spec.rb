@@ -135,6 +135,11 @@ describe Template::Spec do
         spec.klippfile.should eq fixture
       end
 
+      it 'references the repo in the Klippfile' do
+        spec = Template::Spec.from_file(@path)
+        spec.klippfile.should include 'template-repository/Example'
+      end
+
     end
 
   end

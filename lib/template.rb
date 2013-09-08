@@ -22,9 +22,13 @@ module Template
   end
 
   def self.cli_list(params=[])
-    list.each do |template|
+    l = list
+    l.each do |template|
       Formatador.display_line "* #{template[:repo]}/[green]#{template[:name].ljust(16)}[/]"
     end
+
+    Formatador.display_line "You can use just the name in commands `#{l.first[:name]}`, as long as it's unambiguous."
+    Formatador.display_line "Otherwise include the repository, e.g. `#{l.first[:repo]+'/'+l.first[:name]}`"
   end
 
   def self.list
@@ -39,8 +43,12 @@ module Template
   end
 
   def self.path_for_template(template)
-    specs = Dir.glob(File.join(Klipp::Configuration.root_dir, '**', "#{template}.klippspec"))
-    raise "Unknown template: #{template}" unless specs && specs.count > 0
+    chunks = template.split(File::SEPARATOR)
+    name = chunks.pop
+    repo = chunks.count > 0 ? File.join(chunks.pop, '**') : '**'
+    specs = Dir.glob(File.join(Klipp::Configuration.root_dir, repo, "#{name}.klippspec"))
+    raise "Unknown template: #{template}. Use `klipp template list` to see your options" unless specs && specs.count > 0
+    raise "Found multiple templates named #{template}. Prefix the template with the repository to narrow it down. Use `klipp template list` to see your options" if specs && specs.count > 1
     specs.first
   end
 
