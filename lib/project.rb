@@ -14,7 +14,12 @@ module Project
   end
 
   def self.cli_init(params=[])
+    params = Klipp::ParameterList.new(params)
+    template = params.shift_argument
+    raise 'Template name required for project init' unless template
 
+    spec = Template::Spec.from_file(Template.path_for_template template)
+    File.write('Klippfile', spec.klippfile)
   end
 
 end

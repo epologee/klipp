@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Template::Token do
 
   before do
-    @token = Template::Token.new('TOKEN_NAME')
+    @token = Template::Token.new
   end
 
   it 'has a hidden property' do

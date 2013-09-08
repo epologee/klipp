@@ -25,7 +25,7 @@ module Template
     end
 
     def token identifier, &config
-      token = Template::Token.new(identifier)
+      token = Template::Token.new
       raise 'Incomplete token configuration' unless block_given?
       config.yield(token)
       self[identifier] = token
@@ -41,15 +41,15 @@ module Template
     end
 
     def defaults
-      blank = self[:BLANK] = Template::Token.new :BLANK
+      blank = self[:BLANK] = Template::Token.new
       blank.hidden = true
       blank.value = ''
 
-      date = self[:DATE] = Template::Token.new :DATE
+      date = self[:DATE] = Template::Token.new
       date.hidden = true
       date.value = DateTime.now.strftime('%F')
 
-      year = self[:YEAR] = Template::Token.new :YEAR
+      year = self[:YEAR] = Template::Token.new
       year.hidden = true
       year.value = DateTime.now.strftime('%Y')
     end
@@ -61,6 +61,19 @@ module Template
 
     def invalidate(message)
       raise message
+    end
+
+    def klippfile
+      kf = "template '#{self.name}' do |project|\n\n"
+      @tokens.each do |name, token|
+        unless token.hidden
+          kf += "  # #{token.comment}\n" if token.comment
+          kf += "  # #{token.validation_hint}\n" if token.validation_hint
+          kf += "  project[:#{name}] = \"\"\n"
+          kf += "\n"
+        end
+      end
+      kf += "end"
     end
   end
 

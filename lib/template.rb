@@ -33,4 +33,9 @@ module Template
     end
   end
 
+  def self.path_for_template(template)
+    specs = Dir.glob(File.join(Klipp::Configuration.root_dir, '**', "#{template}.klippspec"))
+    specs.first if specs && specs.count
+  end
+
 end

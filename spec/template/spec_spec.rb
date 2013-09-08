@@ -24,11 +24,11 @@ describe Template::Spec do
       Template::Spec.new {}
     end
 
-    it 'raises an error when reconfiguring a token, like the BLANK token' do
+    it 'raises an error when overwriting tokens, like the BLANK token' do
       (expect do
         Template::Spec.new do |spec|
           spec.token :BLANK do |t|
-            t.name
+            t.comment = "You can't overwrite tokens"
           end
         end
       end).to raise_error RuntimeError
@@ -65,14 +65,14 @@ describe Template::Spec do
     end
 
     it 'has a token hash' do
-      @template[:PROJECT_ID] = Template::Token.new(:PROJECT_ID)
+      @template[:PROJECT_ID] = Template::Token.new
       @template[:PROJECT_ID].should be_an_instance_of(Template::Token)
     end
 
-    it 'creates a token by name' do
+    it 'creates a token' do
       yielded_token = :not_a_token
       @template.token(:PROJECT_ID) { |t| yielded_token = t }
-      yielded_token.name.should eq :PROJECT_ID
+      yielded_token.should be_an_instance_of Template::Token
     end
 
     it 'has a blank token' do
@@ -98,15 +98,33 @@ describe Template::Spec do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(File.dirname(__dir__), 'fixtures'))
     end
 
-    it 'loads a spec from a file' do
-      klippspec = File.join(Klipp::Configuration.root_dir, 'template-repository', 'Example', 'Example.klippspec')
-      Template::Spec.from_file(klippspec).should be_an_instance_of Template::Spec
+    context 'with an invalid klippspec' do
+
+      it 'raises an error when loading an invalid klippspec' do
+        klippspec = File.join(Klipp::Configuration.root_dir, 'template-repository', 'BadExample', 'BadExample.klippspec')
+        File.exists?(klippspec).should be true
+        expect { Template::Spec.from_file(klippspec) }.to raise_error RuntimeError
+      end
+
     end
 
-    it 'raises an error when loading an invalid klippspec' do
-      klippspec = File.join(Klipp::Configuration.root_dir, 'template-repository', 'BadExample', 'BadExample.klippspec')
-      File.exists?(klippspec).should be true
-      expect { Template::Spec.from_file(klippspec) }.to raise_error RuntimeError
+    context 'with a valid klippspec' do
+
+      before do
+        @path = File.join(Klipp::Configuration.root_dir, 'template-repository', 'Example', 'Example.klippspec')
+        File.exists?(@path).should be true
+      end
+
+      it 'loads a spec from a file' do
+        Template::Spec.from_file(@path).should be_an_instance_of Template::Spec
+      end
+
+      it 'generates a project specific Klippfile' do
+        spec = Template::Spec.from_file(@path)
+        fixture = read_fixture 'Klippfile-after-init'
+        spec.klippfile.should eq fixture
+      end
+
     end
 
   end
