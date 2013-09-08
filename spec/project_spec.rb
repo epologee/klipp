@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Project do
 
-  context 'when routing commands'  do
+  context 'when routing commands' do
 
     it 'raises an error when not supplying any commands' do
       expect { Project.route(*%w[]) }.to raise_error RuntimeError
@@ -30,20 +30,36 @@ describe Project do
       expect { Project.cli_init([]) }.to raise_error RuntimeError
     end
 
-    it 'creates a Klippfile' do
-      klippfile = read_fixture 'Klippfile-after-init'
-      File.expects(:write).with('Klippfile', klippfile)
-      Project.cli_init(%w[Example])
+    context 'without an existing Klippfile' do
+      before do
+        File.stubs(:exists?).returns(false)
+      end
+
+      it 'write a new Klippfile' do
+        klippfile = read_fixture 'Klippfile-after-init'
+        File.expects(:write).with('Klippfile', klippfile)
+        Project.cli_init(%w[Example])
+      end
     end
 
-  end
 
-  context 'init from ~/.klipp' do
+    context 'with an existing Klippfile' do
 
-    it 'works' do
-      klippfile = read_fixture 'Klippfile-after-init'
-      File.expects(:write).with('Klippfile', klippfile)
-      Project.cli_init(%w[Example])
+      before do
+        File.stubs(:exists?).returns(true)
+      end
+
+      it 'will not overwrite' do
+        File.expects(:write).never
+        expect { Project.cli_init(%w[Example]) }.to raise_error RuntimeError
+      end
+
+      it 'will overwrite when forced' do
+        klippfile = read_fixture 'Klippfile-after-init'
+        File.expects(:write).with('Klippfile', klippfile)
+        Project.cli_init(%w[Example -f])
+      end
+
     end
 
   end

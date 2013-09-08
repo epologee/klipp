@@ -6,7 +6,7 @@ module Template
     attr_accessor :name, :post_action
 
     def self.from_file(path)
-      string = IO.read path if File.exists? path
+      string = IO.read path
       spec = Template::Spec.new
       spec.from_string(string, path)
     end
@@ -31,7 +31,7 @@ module Template
       begin
         eval(string, nil, path)
       rescue Exception => e
-        raise "Error evaluating spec: #{File.basename(path)}:\n#{e.backtrace.join("\n")}"
+        raise "Error evaluating spec: #{File.basename(path)}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
       end
       validate
     end
