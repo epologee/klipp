@@ -8,25 +8,22 @@ describe Template::Spec do
     end
 
     it 'yields on initialize' do
-      expect { |probe| Template::Spec.new &probe }.to yield_control
-    end
-
-    it 'raises an error when initialized without a block' do
-      expect { Template::Spec.new }.to raise_error RuntimeError
+      expect { |probe| Template::Spec.new().spec 'Example', &probe }.to yield_control
     end
 
     it 'passes itself as a parameter on yield' do
-      expect { |probe| Template::Spec.new &probe }.to yield_with_args(be_an_instance_of(Template::Spec))
+      expect { |probe| Template::Spec.new().spec('Example', &probe) }.to yield_with_args(be_an_instance_of(Template::Spec))
     end
 
     it 'validates the spec after configuration' do
-      Template::Spec.any_instance.expects(:validate)
-      Template::Spec.new {}
+      spec = Template::Spec.new
+      spec.expects(:validate)
+      spec.spec('')
     end
 
     it 'raises an error when overwriting tokens, like the BLANK token' do
       (expect do
-        Template::Spec.new do |spec|
+        Template::Spec.new().spec 'Example' do |spec|
           spec.token :BLANK do |t|
             t.comment = "You can't overwrite tokens"
           end
@@ -37,13 +34,17 @@ describe Template::Spec do
 
   context 'with an invalid spec' do
 
+    before do
+      @spec = Template::Spec.new
+    end
+
     it 'invalidates' do
-      Template::Spec.any_instance.expects(:invalidate)
-      Template::Spec.new {}
+      @spec.expects(:invalidate)
+      @spec.spec('')
     end
 
     it 'raises an error when invalidating' do
-      expect { Template::Spec.new {} }.to raise_error RuntimeError
+      expect { @spec.spec('') }.to raise_error RuntimeError
     end
 
   end
@@ -51,7 +52,8 @@ describe Template::Spec do
   context 'with a valid spec' do
 
     before do
-      @template = Template::Spec.new { |s| s.name = 'Example' }
+      @template = Template::Spec.new
+      @template.spec('Example') { }
     end
 
     it 'has a name' do

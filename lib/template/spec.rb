@@ -5,22 +5,39 @@ module Template
 
     def self.from_file(path)
       string = IO.read path if File.exists? path
-      from_string(string, path)
+      spec = Template::Spec.new
+      spec.from_string(string, path)
     end
 
-    def self.from_string(string, path)
+    def from_string(string, path)
       begin
         eval(string, nil, path)
       rescue Exception => e
         raise "Invalid #{File.basename(path)}:\n#{e.backtrace.join("\n")}"
       end
+      validate
     end
 
-    def initialize &config
+    def initialize
       @tokens = Hash[]
-      raise 'Spec configuration requires a block parameter' unless block_given?
-      defaults
-      config.yield(self)
+
+      blank = self[:BLANK] = Template::Token.new
+      blank.hidden = true
+      blank.value = ''
+
+      date = self[:DATE] = Template::Token.new
+      date.hidden = true
+      date.value = DateTime.now.strftime('%F')
+
+      year = self[:YEAR] = Template::Token.new
+      year.hidden = true
+      year.value = DateTime.now.strftime('%Y')
+    end
+
+    # This method is called from the klippspec
+    def spec name, &config
+      self.name = name
+      config.yield(self) if (block_given?)
       validate
     end
 
@@ -40,23 +57,10 @@ module Template
       @tokens[name] = token
     end
 
-    def defaults
-      blank = self[:BLANK] = Template::Token.new
-      blank.hidden = true
-      blank.value = ''
-
-      date = self[:DATE] = Template::Token.new
-      date.hidden = true
-      date.value = DateTime.now.strftime('%F')
-
-      year = self[:YEAR] = Template::Token.new
-      year.hidden = true
-      year.value = DateTime.now.strftime('%Y')
-    end
-
     def validate
       msg = 'Template configuration invalid: '
-      invalidate msg+'missing name' unless @name && @name.length
+      invalidate msg+'missing name' unless @name && @name.length > 0
+      self
     end
 
     def invalidate(message)

@@ -1,5 +1,4 @@
-Template::Spec.new do |s|
-  s.name = 'Example'
+spec 'Example' do |s|
   s.post_action = 'pod install'
 
   s.token :PROJECT_TITLE do |t|
