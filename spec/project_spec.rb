@@ -20,7 +20,7 @@ describe Project do
 
   end
 
-  context 'init' do
+  context 'init from fixtures' do
 
     before do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
@@ -31,6 +31,16 @@ describe Project do
     end
 
     it 'creates a Klippfile' do
+      klippfile = read_fixture 'Klippfile-after-init'
+      File.expects(:write).with('Klippfile', klippfile)
+      Project.cli_init(%w[Example])
+    end
+
+  end
+
+  context 'init from ~/.klipp' do
+
+    it 'works' do
       klippfile = read_fixture 'Klippfile-after-init'
       File.expects(:write).with('Klippfile', klippfile)
       Project.cli_init(%w[Example])

@@ -1,6 +1,8 @@
 module Template
 
   class Spec
+    require 'date'
+
     attr_accessor :name, :post_action
 
     def self.from_file(path)
