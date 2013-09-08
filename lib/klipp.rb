@@ -11,20 +11,32 @@ module Klipp
   def self.route(*argv)
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument;
-    case (command)
-      when 'project'
-        Project.route(*params)
-      when 'template'
-        Template.route(*params)
+    commands = {
+        project: lambda { Project.route(*params) },
+        template: lambda { Template.route(*params) }
+    }
+    case command
       when nil
-        raise 'Missing klipp command'
+        raise Klipp::Hint.new "Add a command to $ klipp [#{commands.keys.join('|')}]"
       else
-        raise "Unknown command: #{command}"
+        if commands[command.to_sym]
+          commands[command.to_sym].call
+        else
+          raise "Unknown klipp command: #{command}"
+        end
     end
     0 # exit code
   rescue Exception => e
-    Formatador.display_line("[red][!] #{e.message}[/]")
+    case e
+      when Klipp::Hint
+        Formatador.display_line("[yellow][?] #{e.message}[/]")
+      else
+        Formatador.display_line("[red][!] #{e.message}[/]")
+    end
     1 # exit code
+  end
+
+  class Hint < StandardError
   end
 
 end

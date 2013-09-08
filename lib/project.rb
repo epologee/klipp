@@ -3,13 +3,18 @@ module Project
   def self.route(*argv)
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument
+    commands = {
+        init: lambda { cli_init(params) }
+    }
     case command
-      when 'init'
-        cli_init(params)
       when nil
-        raise 'Missing project command'
+        raise Klipp::Hint.new "Add a command to $ klipp project [#{commands.keys.join('|')}]"
       else
-        raise "Unknown project command: #{command}"
+        if commands[command.to_sym]
+          commands[command.to_sym].call
+        else
+          raise "Unknown project command: #{command}"
+        end
     end
   end
 

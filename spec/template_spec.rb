@@ -5,8 +5,8 @@ describe Template do
 
   context 'when routing commands' do
 
-    it 'raises an error when not supplying any commands' do
-      expect { Template.route(*%w[]) }.to raise_error RuntimeError
+    it 'raises a hint when not supplying any commands' do
+      expect { Template.route(*%w[]) }.to raise_error Klipp::Hint
     end
 
     it 'raises an error when supplying an unknown command' do

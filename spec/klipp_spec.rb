@@ -21,10 +21,10 @@ describe Klipp do
 
   context 'when routing commands' do
 
-    it 'returns exit code 1 without any commands and displays the error' do
+    it 'returns exit code 1 without any commands and displays a hint' do
       (capture_stdout do
         Klipp.route(*%w[]).should eq 1
-      end).should include '[!]'
+      end).should include '[?]'
     end
 
     it 'returns exit code 1 with an unknown command and displays the error' do

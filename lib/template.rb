@@ -6,13 +6,18 @@ module Template
   def self.route(*argv)
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument
+    commands = {
+        list: lambda {  cli_list(params) }
+    }
     case command
-      when 'list'
-        cli_list(params)
       when nil
-        raise 'Missing template command'
+        raise Klipp::Hint.new "Add a command to $ klipp [#{commands.keys.join('|')}]"
       else
-        raise "Unknown template command: #{command}"
+        if commands[command.to_sym]
+          commands[command.to_sym].call
+        else
+          raise "Unknown klipp command: #{command}"
+        end
     end
   end
 
