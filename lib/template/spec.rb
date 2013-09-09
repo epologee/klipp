@@ -27,6 +27,12 @@ module Template
       "#{template_hash[:repo]}/#{template_hash[:name]}"
     end
 
+    def self.expand_identifier(template_identifier)
+      path = spec_path_for_identifier template_identifier
+      hash = hash_for_spec_path path
+      hash_to_identifier hash
+    end
+
     def self.from_file(path)
       string = IO.read path
       spec = Template::Spec.new
@@ -96,7 +102,7 @@ module Template
     end
 
     def klippfile
-      kf = "template '#{self.identifier}' do |project|\n\n"
+      kf = "template '#{self.class.expand_identifier(self.identifier)}' do |project|\n\n"
       @tokens.each do |name, token|
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment
