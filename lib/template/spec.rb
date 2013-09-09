@@ -3,7 +3,7 @@ module Template
   class Spec
     require 'date'
 
-    attr_accessor :identifier
+    attr_accessor :identifier, :block_actions_under_git
     attr_reader :post_actions
 
     def self.identifier_is_ambiguous(identifier)
@@ -74,6 +74,18 @@ module Template
 
     def post_actions=(post_actions)
       @post_actions = post_actions.is_a?(Array) ? post_actions : [post_actions.to_s]
+    end
+
+    def pre_action=(action)
+      pre_actions << action
+    end
+
+    def pre_actions
+      @pre_actions ||= []
+    end
+
+    def pre_actions=(pre_actions)
+      @pre_actions = pre_actions.is_a?(Array) ? pre_actions : [pre_actions.to_s]
     end
 
     def from_string(string, path)

@@ -53,6 +53,18 @@ module Project
     spec_path = Template::Spec.spec_path_for_identifier maker.identifier
     spec = Template::Spec.from_file spec_path
     spec.set_token_values(maker.tokens)
+
+    block_actions = spec.block_actions_under_git && git_repository?
+    if spec.pre_actions.count > 0
+      if block_actions
+        Formatador.display_line("[yellow][i][/] Git repository found, not running pre-actions (see .klippspec).")
+        puts()
+      else
+        run_actions(spec.pre_actions) if Klipp.env.prod?
+        Formatador.display_line("[green][√] Pre-actions complete.[/]")
+      end
+    end
+
     force = params.splice_option('-f')
 
     source_dir = File.dirname(Template::Spec.spec_path_for_identifier maker.identifier)
@@ -74,20 +86,35 @@ module Project
       result.each { |r| Formatador.display_line(r.gsub(strip, '')) unless File.directory? r }
     end
 
-    if spec.post_actions
-      count = spec.post_actions.count()
-      puts()
-      spec.post_actions.each do |action|
-        Formatador.display_line("Running `#{action}`...\n")
-        system(action) if Klipp.env.prod?
+    if spec.post_actions.count > 0
+      if block_actions
         puts()
-        #IO.popen(action, :err=>[:child, :out]) { |f| puts '  '+f.read.gsub("\n", "\n  ") }
-        raise "Error running post action `#{action}`." if $? && $?.exitstatus > 0
+        Formatador.display_line("[yellow][i][/] Git repository found, not running post-actions (see .klippspec).")
+      else
+        run_actions(spec.post_actions) if Klipp.env.prod?
+        Formatador.display_line("[green][√] Post-actions complete.[/]")
       end
-      Formatador.display_line("[green][√] Post actions complete.[/]")
     end
 
-    `open "#{Dir.pwd}"` if Klipp.env.prod?
+    puts()
+    Formatador.display_line("[green][√] Done.[/]")
+  end
+
+  def self.git_repository?
+    `git rev-parse --is-inside-work-tree 2>&1`.match /true/
+  end
+
+  def self.run_actions(actions)
+    count = actions.count()
+    puts()
+    actions.each do |action|
+      Formatador.display_line("[yellow][i][/] Running `#{action}`...")
+      puts()
+      system(action) if Klipp.env.prod?
+      puts()
+      #IO.popen(action, :err=>[:child, :out]) { |f| puts '  '+f.read.gsub("\n", "\n  ") }
+      raise "Error running action `#{action}`." if $? && $?.exitstatus > 0
+    end
   end
 
 end
