@@ -5,13 +5,21 @@ module Template
 
     attr_accessor :identifier, :post_action
 
-    def self.spec_path_for_identifier(identifier)
+    def self.identifier_is_ambiguous(identifier)
+      specs_matching_identifier(identifier).count == 1
+    end
+
+    def self.specs_matching_identifier(identifier)
       chunks = identifier.split(File::SEPARATOR)
       name = chunks.pop
       repo = chunks.count > 0 ? File.join(chunks.pop, '**') : '**'
-      specs = Dir.glob(File.join(Klipp::Configuration.root_dir, repo, "#{name}.klippspec"))
+      Dir.glob(File.join(Klipp::Configuration.root_dir, repo, "#{name}.klippspec"))
+    end
+
+    def self.spec_path_for_identifier(identifier)
+      specs = specs_matching_identifier identifier
       raise "Unknown template: #{identifier}. Use `klipp template list` to see your options" unless specs && specs.count > 0
-      raise "Found multiple templates named #{identifier}. Prefix the template with the repository to narrow it down. Use `klipp template list` to see your options" if specs && specs.count > 1
+      raise "Found multiple templates named #{identifier}, use a full template identifier to pick one. Run `klipp template list` to see your options" if specs && specs.count > 1
       specs.first
     end
 
@@ -102,7 +110,7 @@ module Template
     end
 
     def klippfile
-      kf = "template '#{self.class.expand_identifier(self.identifier)}' do |project|\n\n"
+      kf = "instantiate '#{self.class.expand_identifier(self.identifier)}' do |project|\n\n"
       @tokens.each do |name, token|
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment

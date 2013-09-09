@@ -1,0 +1,3 @@
+instantiate 'template-repository/FCUtrechtFancal' do
+  lalala
+end

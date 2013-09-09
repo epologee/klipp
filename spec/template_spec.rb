@@ -32,7 +32,9 @@ describe Template do
     end
 
     it 'lists the available templates, like Example' do
-      Template.list.should include({ name: 'Example', repo: 'template-repository' })
+      capture_stdout {
+        Template.cli_list
+      }.should include 'Example', 'template-repository'
     end
 
   end

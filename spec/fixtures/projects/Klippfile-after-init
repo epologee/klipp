@@ -1,4 +1,4 @@
-template 'template-repository/Example' do |project|
+instantiate 'template-repository/Example' do |project|
 
   # Project title (e.g. 'Amazing Application')
   # At least three characters long, start with a capital character, may contain spaces

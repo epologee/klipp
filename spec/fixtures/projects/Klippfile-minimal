@@ -1,1 +1,1 @@
-project 'template-repository/FCUtrechtFancal'
+instantiate 'template-repository/Example'

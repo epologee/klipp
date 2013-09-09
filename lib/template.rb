@@ -7,7 +7,7 @@ module Template
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument
     commands = {
-        list: lambda { cli_list(params) }
+        list: lambda { cli_list }
     }
     case command
       when nil
@@ -21,7 +21,7 @@ module Template
     end
   end
 
-  def self.cli_list(params=[])
+  def self.cli_list
     l = list
     l.each do |template|
       Formatador.display_line "* #{template[:repo]}/[green]#{template[:name].ljust(16)}[/]"

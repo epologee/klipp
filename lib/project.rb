@@ -1,10 +1,13 @@
+require 'project/maker'
+
 module Project
 
   def self.route(*argv)
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument
     commands = {
-        init: lambda { cli_init(params) }
+        init: lambda { cli_init(params) },
+        make: lambda { cli_make }
     }
     case command
       when nil
@@ -42,6 +45,10 @@ module Project
     if $? && $?.exitstatus > 0
       `open -t #{filename}` if File.exists?(filename)
     end
+  end
+
+  def self.cli_make
+    Project::Maker.new().make
   end
 
 end

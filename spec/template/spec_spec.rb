@@ -17,6 +17,10 @@ describe Template::Spec do
       expect { Template::Spec.spec_path_for_identifier('Non-existing') }.to raise_error RuntimeError
     end
 
+    it 'knows about unambiguous specs' do
+      Template::Spec.identifier_is_ambiguous('Ambiguous').should eq false
+    end
+
     it 'raises error if a template is unambiguous' do
       expect { Template::Spec.spec_path_for_identifier('Ambiguous') }.to raise_error RuntimeError, /Found multiple templates/
     end

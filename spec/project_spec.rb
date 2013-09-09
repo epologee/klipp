@@ -18,6 +18,11 @@ describe Project do
       Project.route(*%w[init Example])
     end
 
+    it 'routes make' do
+      Project.expects(:cli_make)
+      Project.route(*%w[make])
+    end
+
   end
 
   context 'init from fixtures' do
@@ -60,6 +65,15 @@ describe Project do
         Project.cli_init(%w[Example -f])
       end
 
+    end
+
+  end
+
+  context 'make from fixture' do
+
+    it 'delegates making to the Maker class' do
+      Project::Maker.any_instance.expects(:make)
+      Project.cli_make
     end
 
   end
