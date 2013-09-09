@@ -19,3 +19,5 @@ RSpec.configure do |config|
   config.mock_framework = :mocha
   config.order = 'random'
 end
+
+Klipp.env = StringInquirer.new('test')

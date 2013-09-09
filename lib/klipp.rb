@@ -1,6 +1,7 @@
 require 'ptools'
 require 'formatador'
 require 'colorize'
+require 'fileutils'
 require 'project'
 require 'template'
 require 'klipp/configuration'
@@ -8,6 +9,14 @@ require 'klipp/version'
 require 'klipp/parameter_list'
 
 module Klipp
+
+  def self.env
+    @@env ||= StringInquirer.new('prod')
+  end
+
+  def self.env=(env)
+    @@env = env
+  end
 
   def self.route(*argv)
     params = Klipp::ParameterList.new(argv)
@@ -40,6 +49,16 @@ module Klipp
   class Hint < StandardError
   end
 
+end
+
+class StringInquirer < String
+  def method_missing(method_name, *arguments)
+    if method_name.to_s[-1,1] == '?'
+      self == method_name.to_s[0..-2]
+    else
+      super
+    end
+  end
 end
 
 def capture_stdout

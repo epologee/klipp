@@ -86,7 +86,7 @@ describe Project do
       File.exists?(File.join Dir.pwd, 'Podfile').should be true
       File.exists?(File.join Dir.pwd, '.gitignore').should be true
       File.exists?(File.join Dir.pwd, 'AmazingApp').should be true
-      File.exists?(File.join Dir.pwd, '.Example.klippspec').should be false
+      File.exists?(File.join Dir.pwd, 'Example.klippspec').should be false
 
     end
 

@@ -36,7 +36,7 @@ module Project
 
     File.write('Klippfile', spec.klippfile)
 
-    Formatador.display_line("[green][√] #{will_overwrite ? "Re-saved" : "Saved"} #{filename}[/]")
+    Formatador.display_line("[green][√] #{will_overwrite ? "Re-saved" : "Saved"} #{filename}.[/]")
 
     capture_stdout {
       `open -a TextMate #{filename} 2>&1` if File.exists?(filename)
@@ -50,17 +50,31 @@ module Project
   def self.cli_make(params)
     params = Klipp::ParameterList.new(params)
     maker = Project::Maker.from_file File.join(Dir.pwd, 'Klippfile')
-    spec = Template::Spec.from_file(Template::Spec.spec_path_for_identifier maker.identifier)
+    spec_path = Template::Spec.spec_path_for_identifier maker.identifier
+    spec = Template::Spec.from_file spec_path
     spec.set_token_values(maker.tokens)
     force = params.splice_option('-f')
 
     source_dir = File.dirname(Template::Spec.spec_path_for_identifier maker.identifier)
     target_dir = Dir.pwd
 
-    @source_files = Dir.glob(File.join(source_dir, '**', '*'), File::FNM_DOTMATCH)
-    @source_files.each do |source_file|
+    source_files = Dir.glob(File.join(source_dir, '**', '*'), File::FNM_DOTMATCH).reject { |f| f == spec_path }
+
+    result = source_files.map do |source_file|
       spec.transfer_file source_file, spec.target_file(source_dir, source_file, target_dir), force
     end
+
+    verbose = params.splice_option '-v'
+
+    Formatador.display_line("[green][√] Project made from template #{Template::Spec.expand_identifier maker.identifier}. #{'Run `klipp project make -v` to see what files were created.' unless verbose}[/]")
+
+    if (verbose)
+      puts()
+      strip = File.dirname(Dir.pwd)+File::SEPARATOR
+      result.each { |r| Formatador.display_line(r.gsub(strip, '')) unless File.directory? r}
+    end
+
+    `open "#{Dir.pwd}"` if Klipp.env.prod?
   end
 
 end

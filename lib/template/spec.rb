@@ -113,7 +113,7 @@ module Template
         begin
           token.value = value
         rescue Exception => e
-          invalidate "token :#{name}. #{e.message}"
+          invalidate msg+"token :#{name}. #{e.message}"
         end
       end
       @tokens.each do |name, token|
@@ -158,6 +158,8 @@ module Template
       else
         raise "#{target_file} already exists, not overwriting. Use -f to force overwriting."
       end
+
+      target_file
     end
 
     def replace_tokens(string_with_tokens, delimiter='XX')
