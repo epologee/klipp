@@ -105,11 +105,15 @@ describe Template::Spec do
       @template.identifier.should eq 'repo/ProjectX'
     end
 
-    it 'has a post-action' do
+    it 'has a post-action setter' do
       @template.post_action = 'pod install'
-      @template.post_action.should eq 'pod install'
+      @template.post_actions.should eq ['pod install']
     end
 
+    it 'has a post-actions setter' do
+      @template.post_actions = ['git init', 'git add .', 'git commit -m "Initial commit."', 'pod install']
+      @template.post_actions.should eq ['git init', 'git add .', 'git commit -m "Initial commit."', 'pod install']
+    end
     it 'has a token hash' do
       @template[:PROJECT_ID] = Template::Token.new
       @template[:PROJECT_ID].should be_an_instance_of(Template::Token)

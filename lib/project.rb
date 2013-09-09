@@ -71,7 +71,20 @@ module Project
     if (verbose)
       puts()
       strip = File.dirname(Dir.pwd)+File::SEPARATOR
-      result.each { |r| Formatador.display_line(r.gsub(strip, '')) unless File.directory? r}
+      result.each { |r| Formatador.display_line(r.gsub(strip, '')) unless File.directory? r }
+    end
+
+    if spec.post_actions
+      count = spec.post_actions.count()
+      puts()
+      spec.post_actions.each do |action|
+        Formatador.display_line("Running `#{action}`...\n")
+        system(action) if Klipp.env.prod?
+        puts()
+        #IO.popen(action, :err=>[:child, :out]) { |f| puts '  '+f.read.gsub("\n", "\n  ") }
+        raise "Error running post action `#{action}`." if $? && $?.exitstatus > 0
+      end
+      Formatador.display_line("[green][√] Post actions complete.[/]")
     end
 
     `open "#{Dir.pwd}"` if Klipp.env.prod?

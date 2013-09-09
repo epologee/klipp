@@ -1,5 +1,5 @@
 spec 'Example' do |s|
-  s.post_action = 'pod install'
+  s.post_actions = 'pod install'
 
   s.token :PROJECT_TITLE do |t|
     t.comment = "Project title (e.g. 'Amazing Application')"

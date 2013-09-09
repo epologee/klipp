@@ -3,7 +3,8 @@ module Template
   class Spec
     require 'date'
 
-    attr_accessor :identifier, :post_action
+    attr_accessor :identifier
+    attr_reader :post_actions
 
     def self.identifier_is_ambiguous(identifier)
       specs_matching_identifier(identifier).count == 1
@@ -61,6 +62,18 @@ module Template
       year = self[:YEAR] = Template::Token.new
       year.hidden = true
       year.value = DateTime.now.strftime('%Y')
+    end
+
+    def post_action=(action)
+      post_actions << action
+    end
+
+    def post_actions
+      @post_actions ||= []
+    end
+
+    def post_actions=(post_actions)
+      @post_actions = post_actions.is_a?(Array) ? post_actions : [post_actions.to_s]
     end
 
     def from_string(string, path)
