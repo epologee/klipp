@@ -33,13 +33,18 @@ describe Project::Maker do
 
       context 'an invalid klippfile' do
 
-        it 'raises an error' do
+        it "raises an error if it's bad ruby" do
           maker = Project::Maker.new()
           maker.expects(:invalidate).never
 
           path = fixture_path('Klippfile-bad-ruby')
           string = read_fixture('Klippfile-bad-ruby')
           expect { maker.eval_string(string, path) }.to raise_error RuntimeError
+        end
+
+        it "raises an error the Klippfile doesn't exist" do
+          File.stubs(:exists?).returns false
+          expect { Project::Maker.from_file ('anywhere/Klippfile') }.to raise_error RuntimeError
         end
 
         it 'warns about unambiguous templates' do
