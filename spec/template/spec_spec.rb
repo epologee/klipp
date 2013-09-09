@@ -5,7 +5,7 @@ describe Template::Spec do
   context 'identifier methods' do
 
     before do
-      Klipp::Configuration.stubs(:root_dir).returns(p File.join(File.dirname(__dir__), 'fixtures'))
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(File.dirname(__dir__), 'fixtures'))
     end
 
     it 'finds the path to a template name' do
