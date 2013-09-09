@@ -3,6 +3,10 @@ require 'spec_helper'
 
 describe Project do
 
+  before do
+    Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
+  end
+
   context 'route' do
 
     it 'raises a hint when not supplying any commands' do
@@ -26,10 +30,6 @@ describe Project do
   end
 
   context 'init' do
-
-    before do
-      Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
-    end
 
     it 'without template name raises error' do
       expect { Project.cli_init([]) }.to raise_error Klipp::Hint

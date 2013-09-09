@@ -207,5 +207,18 @@ describe Template::Spec do
 
   end
 
+  context 'when creating a klippspec' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(File.dirname(__dir__), 'fixtures'))
+    end
+
+    it 'generates the klippspec' do
+      spec = Template::Spec.new
+      spec.identifier = 'Example'
+      spec.klippspec.should eq read_fixture('Empty.klippspec')
+    end
+
+  end
 
 end

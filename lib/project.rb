@@ -52,7 +52,7 @@ module Project
     maker = Project::Maker.from_file File.join(Dir.pwd, 'Klippfile')
     spec_path = Template::Spec.spec_path_for_identifier maker.identifier
     spec = Template::Spec.from_file spec_path
-    spec.set_token_values(maker.tokens)
+    spec.set_token_values(maker.tokens, params.splice_option('-v'))
 
     block_actions = spec.block_actions_under_git && git_repository?
     if spec.pre_actions.count > 0

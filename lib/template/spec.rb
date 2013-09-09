@@ -130,12 +130,14 @@ module Template
       self
     end
 
-    def set_token_values(tokens)
+    def set_token_values(tokens, verbose=false)
       msg = 'Token configuration error: '
+      puts() if verbose
       tokens.each do |name, value|
         token = self[name]
         invalidate msg+"unknown token :#{name}" unless token
         begin
+          Formatador.display_line("#{name}: [bold]#{value}[/]") if verbose
           token.value = value
         rescue Exception => e
           invalidate msg+"token :#{name}. #{e.message}"
@@ -161,6 +163,23 @@ module Template
         end
       end
       kf += "end"
+    end
+
+    def klippspec
+      ks = "spec 'Empty' do |s|\n"
+      ks += "  s.block_actions_under_git = true\n"
+      ks += "  # s.pre_actions = ['echo \"Hello klipp!\"']\n"
+      ks += "  # s.post_actions = ['pod install']\n"
+      ks += "\n"
+      ks += "  s.token :REPLACEABLE do |t|\n"
+      ks += "    t.comment = \"Replaceable value (to insert in any filename or string containing 'XXREPLACEABLEXX')\"\n"
+      ks += "    t.validation = /^[A-Z][A-Za-z0-9 ]{2,}$/\n"
+      ks += "    t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'\n"
+      ks += "  end\n"
+      ks += "\n"
+      ks += "  # ...\n"
+      ks += "\n"
+      ks += "end"
     end
 
     def target_file(source_dir, source_file, target_dir)

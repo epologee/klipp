@@ -1,7 +1,9 @@
 # Klipp
-## Xcode templates for the rest of us.
+## Code templates for the rest of us.
 
-Klipp is a command line gem for creating new (Xcode) projects from existing templates. Unlike Apple's private plist-based templating system, Klipp takes an existing Xcode project and creates a new project by copying and modifying an existing template project by your own specifications.
+Klipp is a command line gem for creating new programming projects from existing templates. It was originally designed to create Xcode projects. However, there are no Apple or Xcode specific features in Klipp, so you can use it for pretty much any textfile-and-directory-based template.
+
+When compared to Xcode's plist-based templating system, Klipp takes an existing Xcode project and creates a new project by copying and modifying an existing template project by your own specifications.
 
 ## Installation
 

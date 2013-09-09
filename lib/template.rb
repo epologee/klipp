@@ -7,7 +7,8 @@ module Template
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument
     commands = {
-        list: lambda { cli_list }
+        list: lambda { cli_list },
+        init: lambda { cli_init(params) }
     }
     case command
       when nil
@@ -36,6 +37,23 @@ module Template
     specs.map do |spec|
       Template::Spec.hash_for_spec_path spec
     end
+  end
+
+  def self.cli_init(params)
+    params = Klipp::ParameterList.new(params)
+    identifier = params.shift_argument
+    raise Klipp::Hint.new("Add a new template name, like `klipp template init AwesomeTemplate`") unless identifier && identifier.length > 0
+    raise "Invalid template name `#{identifier}`. Stick to simple characters and spaces." unless identifier.match(/^[ A-Za-z0-9_-]+$/)
+
+    spec = Template::Spec.new
+    spec.identifier = identifier.strip
+    file = File.join(Dir.pwd, "#{spec.identifier}.klippspec")
+    force = params.splice_option('-f')
+
+    file_existed = File.exists?(file)
+    allow_write = force || !file_existed
+
+    File.write(file, spec.klippspec) if allow_write
   end
 
 end

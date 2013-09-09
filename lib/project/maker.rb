@@ -53,7 +53,7 @@ module Project
 
     def instantiate(template_identifier, &config)
       @identifier = template_identifier
-      config.yield @tokens if block_given?
+      config.yield(@tokens) if block_given?
     end
   end
 
