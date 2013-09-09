@@ -69,7 +69,7 @@ module Template
       rescue Exception => e
         raise "Error evaluating spec: #{File.basename(path)}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
       end
-      validate
+      validate_spec
     end
 
     # This method is called from the klippspec
@@ -80,7 +80,7 @@ module Template
       rescue Exception => e
         raise "Invalid klippspec configuration: #{e.message}\n  #{e.backtrace.join("\n  ")}"
       end
-      validate
+      validate_spec
     end
 
     def token identifier, &config
@@ -99,10 +99,26 @@ module Template
       @tokens[name] = token
     end
 
-    def validate
+    def validate_spec
       msg = 'Template configuration invalid: '
       invalidate msg+'missing name' unless @identifier && @identifier.length > 0
       self
+    end
+
+    def set_token_values(tokens)
+      msg = 'Token configuration error: '
+      tokens.each do |name, value|
+        token = self[name]
+        invalidate msg+"unknown token :#{name}" unless token
+        begin
+          token.value = value
+        rescue Exception => e
+          invalidate "token :#{name}. #{e.message}"
+        end
+      end
+      @tokens.each do |name, token|
+        invalidate msg+"missing value for token :#{name}" if token.value == nil
+      end
     end
 
     def invalidate(message)
@@ -110,17 +126,46 @@ module Template
     end
 
     def klippfile
-      kf = "instantiate '#{self.class.expand_identifier(self.identifier)}' do |project|\n\n"
+      kf = "instantiate '#{self.class.expand_identifier(self.identifier)}' do |tokens|\n\n"
       @tokens.each do |name, token|
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment
           kf += "  # #{token.validation_hint}\n" if token.validation_hint
-          kf += "  project[:#{name}] = \"\"\n"
+          kf += "  tokens[:#{name}] = \"\"\n"
           kf += "\n"
         end
       end
       kf += "end"
     end
+
+    def target_file(source_dir, source_file, target_dir)
+      stripped_path = source_file.gsub(source_dir, '')
+      customizable_path = replace_tokens(stripped_path)
+      File.join(target_dir, customizable_path)
+    end
+
+    def transfer_file(source_file, target_file, overwrite)
+      FileUtils.mkdir_p File.dirname(target_file)
+
+      if File.directory? source_file
+        FileUtils.mkdir_p target_file
+      elsif !File.exists?(target_file) || overwrite
+        if File.binary? source_file
+          FileUtils.cp(source_file, target_file)
+        else
+          IO.write target_file, replace_tokens(File.read(source_file))
+        end
+      else
+        raise "#{target_file} already exists, not overwriting. Use -f to force overwriting."
+      end
+    end
+
+    def replace_tokens(string_with_tokens, delimiter='XX')
+      replaced = string_with_tokens
+      @tokens.each { |name, token| replaced.gsub!(delimiter+name.to_s+delimiter, token.value) }
+      replaced
+    end
+
   end
 
 end

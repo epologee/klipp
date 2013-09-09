@@ -1,23 +1,23 @@
-instantiate 'template-repository/Example' do |project|
+instantiate 'template-repository/Example' do |tokens|
 
   # Project title (e.g. 'Amazing Application')
   # At least three characters long, start with a capital character, may contain spaces
-  project[:PROJECT_TITLE] = ""
+  tokens[:PROJECT_TITLE] = ""
 
   # Project id (e.g. 'AmazingApp')
   # At least three characters long, no spaces, start with a capital character
-  project[:PROJECT_ID] = ""
+  tokens[:PROJECT_ID] = ""
 
   # Bundle id (e.g. 'com.acme.amazingapp')
   # Reverse domain notation, lower case, no spaces
-  project[:BUNDLE_ID] = ""
+  tokens[:BUNDLE_ID] = ""
 
   # Organization name (e.g. 'ACME')
-  # At least three characters long, start with a capital character, may contain spaces
-  project[:ORGANIZATION_NAME] = ""
+  # At least two characters long, may contain spaces
+  tokens[:ORGANIZATION_NAME] = ""
 
   # Class prefix (e.g. 'AMZ')
   # All caps, at least three, starting with an alphabetical character
-  project[:CLASS_PREFIX] = ""
+  tokens[:CLASS_PREFIX] = ""
 
 end

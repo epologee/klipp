@@ -8,6 +8,11 @@ module Template
       @hidden = false
     end
 
+    def value=(value)
+      raise "Invalid value '#{value}'. #{validation_hint}" unless validation.match(value) if validation
+      @value = value
+    end
+
   end
 
 end

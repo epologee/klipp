@@ -53,7 +53,7 @@ describe Template::Spec do
 
     it 'validates the spec after configuration' do
       spec = Template::Spec.new
-      spec.expects(:validate)
+      spec.expects(:validate_spec)
       spec.spec('')
     end
 
@@ -159,22 +159,45 @@ describe Template::Spec do
       before do
         @path = File.join(Klipp::Configuration.root_dir, 'template-repository', 'Example', 'Example.klippspec')
         File.exists?(@path).should be true
+
+        @spec = Template::Spec.from_file(@path)
       end
 
       it 'loads a spec from a file' do
-        Template::Spec.from_file(@path).should be_an_instance_of Template::Spec
+        @spec.should be_an_instance_of Template::Spec
       end
 
       it 'generates a project specific Klippfile' do
-        spec = Template::Spec.from_file(@path)
         fixture = read_fixture 'Klippfile-after-init'
-        spec.klippfile.should eq fixture
+        @spec.klippfile.should eq fixture
       end
 
       it 'references the repo in the Klippfile' do
-        spec = Template::Spec.from_file(@path)
-        spec.klippfile.should include 'template-repository/Example'
+        @spec.klippfile.should include 'template-repository/Example'
       end
+
+      context 'with a values hash' do
+        before do
+          @values = Hash.new
+          @values[:PROJECT_ID] = "Klipp"
+          @values[:PROJECT_TITLE] = "Templates for the rest of us"
+          @values[:BUNDLE_ID] = "com.epologee.klipp"
+          @values[:ORGANIZATION_NAME] = "epologee"
+          @values[:CLASS_PREFIX] = "KLP"
+        end
+
+        it 'validates token values' do
+          @spec.set_token_values @values
+        end
+
+        it 'replaces delimited tokens with its values' do
+          @spec.set_token_values @values
+          source = 'XXPROJECT_IDXX - XXPROJECT_TITLEXX - XXBUNDLE_IDXX - XXORGANIZATION_NAMEXX - XXCLASS_PREFIXXX'
+          target = 'Klipp - Templates for the rest of us - com.epologee.klipp - epologee - KLP'
+          @spec.replace_tokens(source).should eq target
+        end
+      end
+
 
     end
 

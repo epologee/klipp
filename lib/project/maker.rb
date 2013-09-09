@@ -29,12 +29,12 @@ module Project
 
       case
         when matching_specs.count == 0
-          msg += "Unknown template name `#{@identifier}`."
+          msg += "Unknown template name `#{@identifier}`. "
           msg += "Run `klipp template list` to see your options."
           invalidate msg+msg
         when matching_specs.count > 1
-          msg += "Found multiple templates named `#{@identifier}`."
-          msg += "Use a full template identifier to pick one."
+          msg += "Found multiple templates named `#{@identifier}`. "
+          msg += "Use a full template identifier to pick one. "
           msg += "Run `klipp template list` to see your options."
           hint msg+msg
         else
@@ -54,7 +54,6 @@ module Project
       @identifier = template_identifier
       config.yield @tokens if block_given?
     end
-
   end
 
 end

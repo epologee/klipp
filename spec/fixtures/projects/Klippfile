@@ -13,7 +13,7 @@ instantiate 'template-repository/Example' do |tokens|
   tokens[:BUNDLE_ID] = "com.acme.amazingapp"
 
   # Organization name (e.g. 'ACME')
-  # At least three characters long, start with a capital character, may contain spaces
+  # At least two characters long, may contain spaces
   tokens[:ORGANIZATION_NAME] = "ACME"
 
   # Class prefix (e.g. 'AMZ')

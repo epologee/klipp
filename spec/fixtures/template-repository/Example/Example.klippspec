@@ -15,14 +15,14 @@ spec 'Example' do |s|
 
   s.token :BUNDLE_ID do |t|
     t.comment = "Bundle id (e.g. 'com.acme.amazingapp')"
-    t.validation = /^[a-z0-9.]{3,}$/
+    t.validation = /^[a-z0-9.-]{3,}$/
     t.validation_hint = 'Reverse domain notation, lower case, no spaces'
   end
 
   s.token :ORGANIZATION_NAME do |t|
     t.comment = "Organization name (e.g. 'ACME')"
-    t.validation = /^[A-Z][A-Za-z0-9 ]{2,}$/
-    t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
+    t.validation = /^[A-Za-z0-9 ]{2,}$/
+    t.validation_hint = 'At least two characters long, may contain spaces'
   end
 
   s.token :CLASS_PREFIX do |t|

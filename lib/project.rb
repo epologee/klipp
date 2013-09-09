@@ -7,7 +7,7 @@ module Project
     command = params.shift_argument
     commands = {
         init: lambda { cli_init(params) },
-        make: lambda { cli_make }
+        make: lambda { cli_make(params) }
     }
     case command
       when nil
@@ -32,7 +32,7 @@ module Project
     force = params.splice_option('-f')
     will_overwrite = File.exists?(filename) && force
 
-    raise "#{filename} already exists, not overwriting. Use -f to force overwriting" if File.exists?(filename) && !force
+    raise "#{filename} already exists, not overwriting. Use -f to force overwriting." if File.exists?(filename) && !force
 
     File.write('Klippfile', spec.klippfile)
 
@@ -47,8 +47,20 @@ module Project
     end
   end
 
-  def self.cli_make
-    Project::Maker.new().make
+  def self.cli_make(params)
+    params = Klipp::ParameterList.new(params)
+    maker = Project::Maker.from_file File.join(Dir.pwd, 'Klippfile')
+    spec = Template::Spec.from_file(Template::Spec.spec_path_for_identifier maker.identifier)
+    spec.set_token_values(maker.tokens)
+    force = params.splice_option('-f')
+
+    source_dir = File.dirname(Template::Spec.spec_path_for_identifier maker.identifier)
+    target_dir = Dir.pwd
+
+    @source_files = Dir.glob(File.join(source_dir, '**', '*'), File::FNM_DOTMATCH)
+    @source_files.each do |source_file|
+      spec.transfer_file source_file, spec.target_file(source_dir, source_file, target_dir), force
+    end
   end
 
 end

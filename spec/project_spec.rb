@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Project do
 
-  context 'when routing commands' do
+  context 'route' do
 
     it 'raises a hint when not supplying any commands' do
       expect { Project.route(*%w[]) }.to raise_error Klipp::Hint
@@ -19,13 +19,13 @@ describe Project do
     end
 
     it 'routes make' do
-      Project.expects(:cli_make)
-      Project.route(*%w[make])
+      Project.expects(:cli_make).with(['-f'])
+      Project.route(*%w[make -f])
     end
 
   end
 
-  context 'init from fixtures' do
+  context 'init' do
 
     before do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
@@ -69,11 +69,25 @@ describe Project do
 
   end
 
-  context 'make from fixture' do
+  context 'make' do
 
-    it 'delegates making to the Maker class' do
-      Project::Maker.any_instance.expects(:make)
-      Project.cli_make
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
+      Dir.stubs(:pwd).returns(Dir.mktmpdir)
+
+      maker = Project::Maker.new
+      maker.eval_string(read_fixture('Klippfile'), fixture_path('Klippfile'))
+      Project::Maker.stubs(:from_file).returns(maker)
+    end
+
+    it 'makes a new project' do
+
+      Project.cli_make([])
+      File.exists?(File.join Dir.pwd, 'Podfile').should be true
+      File.exists?(File.join Dir.pwd, '.gitignore').should be true
+      File.exists?(File.join Dir.pwd, 'AmazingApp').should be true
+      File.exists?(File.join Dir.pwd, '.Example.klippspec').should be false
+
     end
 
   end
