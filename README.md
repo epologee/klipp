@@ -17,7 +17,10 @@ Execute and read the usage instructions:
 
 ## Usage
 
-    This branch is under heavy development, this readme is NOT accurate. Sorry 'bout that!
+    klipp template list
+    klipp template init [NewTemplateName]
+    klipp project init [TemplateName]
+    klipp project make [-v]
 
 ## Contributing
 
