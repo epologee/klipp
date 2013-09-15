@@ -23,7 +23,7 @@ Klipp is still in the early development stage. When 0.1 ships, the CLI will feat
 * `klipp template spec <template-name>` - creates a new template specificiation called `<template-name>.klippspec`, for you to configure your template's properties.
 * `klipp template push <repo-name>` - push a new template to one of your template repositories.
 * `klipp template list [<repo-name>]` - list all available templates on your machine [per repository]
-* `klipp prepare <template-name>` - prepare the creation of a new template, by authoring a `Klippfile`
+* `klipp prepare <template-name>` - prepare the creation of files from a new template, by authoring a `Klippfile`
 * `klipp create [<template-name>]` - create files based on the prepared `Klippfile` [or interactively from the terminal].
 
 ## Contributing
