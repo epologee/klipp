@@ -25,5 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rake'
   spec.add_runtime_dependency 'ptools'
   spec.add_runtime_dependency 'formatador'
+  spec.add_runtime_dependency 'colorize'
   spec.add_runtime_dependency 'grit'
 end
