@@ -109,7 +109,7 @@ module Klipp
 
     verbose = params.splice_option '-v'
 
-    Formatador.display_line("[green][√] Make completed using template #{Template::Spec.expand_identifier maker.identifier}. #{'Run `klipp make -v` to see what files were created.' unless verbose}[/]")
+    Formatador.display_line("[green][√] Creation completed using template #{Template::Spec.expand_identifier maker.identifier}. #{'Run `klipp make -v` to see what files were created.' unless verbose}[/]")
 
     if (verbose)
       puts()

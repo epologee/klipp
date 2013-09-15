@@ -94,7 +94,7 @@ describe Klipp do
 
   end
 
-  context 'make' do
+  context 'create' do
 
     before do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
@@ -105,7 +105,7 @@ describe Klipp do
       Klipp::Maker.stubs(:from_file).returns(maker)
     end
 
-    it 'makes a new project' do
+    it 'creates a new project' do
 
       Klipp.cli_create([])
       File.exists?(File.join Dir.pwd, 'Podfile').should be true
