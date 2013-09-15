@@ -51,7 +51,7 @@ module Klipp
       raise Klipp::Hint.new(message)
     end
 
-    def instantiate(template_identifier, &config)
+    def create(template_identifier, &config)
       @identifier = template_identifier
       config.yield(@tokens) if block_given?
     end

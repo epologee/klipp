@@ -153,7 +153,7 @@ module Template
     end
 
     def klippfile
-      kf = "instantiate '#{self.class.expand_identifier(self.identifier)}' do |tokens|\n\n"
+      kf = "create '#{self.class.expand_identifier(self.identifier)}' do |tokens|\n\n"
       @tokens.each do |name, token|
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment

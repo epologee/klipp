@@ -1,1 +1,1 @@
-instantiate 'template-repository/Example'
+create 'template-repository/Example'

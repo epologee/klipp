@@ -56,12 +56,12 @@ describe Klipp::Maker do
 
         it 'raises an error for unknown templates' do
           maker = Klipp::Maker.new()
-          expect { maker.eval_string("instantiate 'Amnesia'", 'fictional-klippspec.rb') }.to raise_error RuntimeError
+          expect { maker.eval_string("create 'Amnesia'", 'fictional-klippspec.rb') }.to raise_error RuntimeError
         end
 
         it 'raises an error for empty templates' do
           maker = Klipp::Maker.new()
-          expect { maker.eval_string("instantiate ''", 'fictional-klippspec.rb') }.to raise_error RuntimeError
+          expect { maker.eval_string("create ''", 'fictional-klippspec.rb') }.to raise_error RuntimeError
         end
       end
 
