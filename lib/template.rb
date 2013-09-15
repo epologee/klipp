@@ -8,7 +8,7 @@ module Template
     command = params.shift_argument
     commands = {
         list: lambda { cli_list },
-        init: lambda { cli_init(params) }
+        spec: lambda { cli_spec(params) }
     }
     case command
       when nil
@@ -39,10 +39,10 @@ module Template
     end
   end
 
-  def self.cli_init(params)
+  def self.cli_spec(params)
     params = Klipp::ParameterList.new(params)
     identifier = params.shift_argument
-    raise Klipp::Hint.new("Add a new template name, like `klipp template init AwesomeTemplate`") unless identifier && identifier.length > 0
+    raise Klipp::Hint.new("Add a new template name, like `klipp template spec AwesomeTemplate`") unless identifier && identifier.length > 0
     raise "Invalid template name `#{identifier}`. Stick to simple characters and spaces." unless identifier.match(/^[ A-Za-z0-9_-]+$/)
 
     spec = Template::Spec.new

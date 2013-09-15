@@ -18,9 +18,9 @@ describe Template do
       Template.route(*%w[list])
     end
 
-    it 'routes init' do
-      Template.expects(:cli_init)
-      Template.route(*%w[init])
+    it 'routes spec' do
+      Template.expects(:cli_spec)
+      Template.route(*%w[spec])
     end
 
   end
@@ -39,37 +39,37 @@ describe Template do
 
   end
 
-  context 'init' do
+  context 'spec' do
 
     before do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
     end
 
     it 'raises a hint without a template name' do
-      expect { Template.cli_init(%w[]) }.to raise_error Klipp::Hint
+      expect { Template.cli_spec(%w[]) }.to raise_error Klipp::Hint
     end
 
     it 'raises an error if the template name is malformed' do
-      expect { Template.cli_init(['No.dots']) }.to raise_error RuntimeError
-      expect { Template.cli_init(['No w&ird characters']) }.to raise_error RuntimeError
-      expect { Template.cli_init(['No w&ird characters!']) }.to raise_error RuntimeError
+      expect { Template.cli_spec(['No.dots']) }.to raise_error RuntimeError
+      expect { Template.cli_spec(['No w&ird characters']) }.to raise_error RuntimeError
+      expect { Template.cli_spec(['No w&ird characters!']) }.to raise_error RuntimeError
     end
 
-    it 'inits a .klippspec, like Empty.klippspec' do
+    it 'specs a .klippspec, like Empty.klippspec' do
       File.expects(:write).with(File.join(Dir.pwd, 'Empty.klippspec'), read_fixture('Empty.klippspec'))
-      Template.cli_init(%w[Empty])
+      Template.cli_spec(%w[Empty])
     end
 
     it 'does not overwrite klippspecs' do
       File.expects(:write).never
       File.stubs(:exists?).returns(true)
-      Template.cli_init(%w[Empty])
+      Template.cli_spec(%w[Empty])
     end
 
     it 'will overwrite klippspecs when forced' do
       File.expects(:write).with(File.join(Dir.pwd, 'Empty.klippspec'), read_fixture('Empty.klippspec'))
       File.stubs(:exists?).returns(true)
-      Template.cli_init(%w[Empty -f])
+      Template.cli_spec(%w[Empty -f])
     end
 
   end
