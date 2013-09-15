@@ -60,6 +60,11 @@ describe Template do
       Template.cli_spec(%w[Empty])
     end
 
+    it 'specs another .klippspec, like Another-Template.klippspec' do
+      File.expects(:write).with(File.join(Dir.pwd, 'Another-Template.klippspec'), read_fixture('Another-Template.klippspec'))
+      Template.cli_spec(%w[Another-Template])
+    end
+
     it 'does not overwrite klippspecs' do
       File.expects(:write).never
       File.stubs(:exists?).returns(true)

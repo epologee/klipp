@@ -28,7 +28,7 @@ module Klipp
     command = params.shift_argument;
     commands = {
         prepare: lambda { cli_prepare(params) },
-        make: lambda { cli_make(params) },
+        create: lambda { cli_create(params) },
         template: lambda { Template.route(*params) }
     }
     case command
@@ -78,7 +78,7 @@ module Klipp
     end
   end
 
-  def self.cli_make(params)
+  def self.cli_create(params)
     params = Klipp::ParameterList.new(params)
     maker = Klipp::Maker.from_file File.join(Dir.pwd, 'Klippfile')
     spec_path = Template::Spec.spec_path_for_identifier maker.identifier

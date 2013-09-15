@@ -38,9 +38,9 @@ describe Klipp do
       Klipp.route(*%w[prepare Example])
     end
 
-    it 'routes make' do
-      Klipp.expects(:cli_make).with(['-f'])
-      Klipp.route(*%w[make -f])
+    it 'routes create' do
+      Klipp.expects(:cli_create).with(['-f'])
+      Klipp.route(*%w[create -f])
     end
 
     it 'routes template with exit code 0' do
@@ -107,7 +107,7 @@ describe Klipp do
 
     it 'makes a new project' do
 
-      Klipp.cli_make([])
+      Klipp.cli_create([])
       File.exists?(File.join Dir.pwd, 'Podfile').should be true
       File.exists?(File.join Dir.pwd, '.gitignore').should be true
       File.exists?(File.join Dir.pwd, 'AmazingApp').should be true

@@ -215,8 +215,8 @@ describe Template::Spec do
 
     it 'generates the klippspec' do
       spec = Template::Spec.new
-      spec.identifier = 'Example'
-      spec.klippspec.should eq read_fixture('Empty.klippspec')
+      spec.identifier = 'Another-Template'
+      spec.klippspec.should eq read_fixture('Another-Template.klippspec')
     end
 
   end

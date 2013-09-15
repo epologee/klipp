@@ -1,0 +1,14 @@
+spec 'Another-Template' do |s|
+  s.block_actions_under_git = true
+  # s.pre_actions = ['echo "Hello klipp!"']
+  # s.post_actions = ['pod install']
+
+  s.token :REPLACEABLE do |t|
+    t.comment = "Replaceable value (to insert in any filename or string containing 'XXREPLACEABLEXX')"
+    t.validation = /^[A-Z][A-Za-z0-9 ]{2,}$/
+    t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'
+  end
+
+  # ...
+
+end

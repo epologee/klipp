@@ -166,7 +166,7 @@ module Template
     end
 
     def klippspec
-      ks = "spec 'Empty' do |s|\n"
+      ks = "spec '#{identifier}' do |s|\n"
       ks += "  s.block_actions_under_git = true\n"
       ks += "  # s.pre_actions = ['echo \"Hello klipp!\"']\n"
       ks += "  # s.post_actions = ['pod install']\n"
