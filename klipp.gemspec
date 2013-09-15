@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'ptools'
   spec.add_development_dependency 'formatador'
+  spec.add_development_dependency 'grit'
 end

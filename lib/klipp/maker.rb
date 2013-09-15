@@ -1,4 +1,4 @@
-module Project
+module Klipp
 
   class Maker
     attr_reader :identifier, :tokens
@@ -6,7 +6,7 @@ module Project
     def self.from_file(path)
       raise "Klippfile not found in directory #{File.dirname path}. Run `klipp project init`." unless File.exists? path
       string = IO.read path
-      maker = Project::Maker.new
+      maker = Klipp::Maker.new
       maker.eval_string(string, path)
     end
 
@@ -24,7 +24,7 @@ module Project
     end
 
     def validate
-      msg = 'Project klippfile invalid: '
+      msg = 'Klippfile invalid: '
       invalidate msg+'missing name' unless @identifier && @identifier.length > 0
       matching_specs = Template::Spec.specs_matching_identifier(@identifier)
 
