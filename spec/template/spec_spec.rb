@@ -172,7 +172,7 @@ describe Template::Spec do
       end
 
       it 'generates a project specific Klippfile' do
-        fixture = read_fixture 'Klippfile-after-init'
+        fixture = read_fixture 'Klippfile-after-prepare'
         @spec.klippfile.should eq fixture
       end
 

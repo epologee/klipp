@@ -27,7 +27,7 @@ module Klipp
     params = Klipp::ParameterList.new(argv)
     command = params.shift_argument;
     commands = {
-        init: lambda { cli_init(params) },
+        prepare: lambda { cli_prepare(params) },
         make: lambda { cli_make(params) },
         template: lambda { Template.route(*params) }
     }
@@ -52,10 +52,10 @@ module Klipp
     1 # exit code
   end
 
-  def self.cli_init(params=[])
+  def self.cli_prepare(params=[])
     params = Klipp::ParameterList.new(params)
     template = params.shift_argument
-    raise Klipp::Hint.new("Add a template name to `klipp project init [template]`. Use `klipp template list` to see your options.") unless template
+    raise Klipp::Hint.new("Add a template name to `klipp prepare [template]`. Use `klipp template list` to see your options.") unless template
 
     spec = Template::Spec.from_file Template::Spec.spec_path_for_identifier(template)
     filename = 'Klippfile'
@@ -67,7 +67,7 @@ module Klipp
 
     File.write('Klippfile', spec.klippfile)
 
-    Formatador.display_line("[green][√] #{will_overwrite ? "Re-saved" : "Saved"} #{filename}.[/]")
+    Formatador.display_line("[green][√] Prepared #{filename} #{'again' if will_overwrite}.[/]")
 
     capture_stdout {
       `open -a TextMate #{filename} 2>&1` if File.exists?(filename)

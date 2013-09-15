@@ -67,7 +67,7 @@ describe Klipp::Maker do
 
       context 'a valid klippfile' do
 
-        it 'inits from a klippfile' do
+        it 'initializes from a klippfile' do
           Klipp::Maker.from_file(fixture_path('Klippfile')).should be_an_instance_of Klipp::Maker
         end
 

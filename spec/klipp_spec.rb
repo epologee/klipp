@@ -33,9 +33,9 @@ describe Klipp do
       end).should include '[!]'
     end
 
-    it 'routes init' do
-      Klipp.expects(:cli_init).with(['Example'])
-      Klipp.route(*%w[init Example])
+    it 'routes prepare' do
+      Klipp.expects(:cli_prepare).with(['Example'])
+      Klipp.route(*%w[prepare Example])
     end
 
     it 'routes make' do
@@ -50,14 +50,14 @@ describe Klipp do
 
   end
 
-  context 'init' do
+  context 'prepare' do
 
     before do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
     end
 
     it 'without template name raises error' do
-      expect { Klipp.cli_init([]) }.to raise_error Klipp::Hint
+      expect { Klipp.cli_prepare([]) }.to raise_error Klipp::Hint
     end
 
     context 'without an existing Klippfile' do
@@ -66,9 +66,9 @@ describe Klipp do
       end
 
       it 'write a new Klippfile' do
-        klippfile = read_fixture 'Klippfile-after-init'
+        klippfile = read_fixture 'Klippfile-after-prepare'
         File.expects(:write).with('Klippfile', klippfile)
-        Klipp.cli_init(%w[Example])
+        Klipp.cli_prepare(%w[Example])
       end
     end
 
@@ -81,13 +81,13 @@ describe Klipp do
 
       it 'will not overwrite' do
         File.expects(:write).never
-        expect { Klipp.cli_init(%w[Example]) }.to raise_error RuntimeError
+        expect { Klipp.cli_prepare(%w[Example]) }.to raise_error RuntimeError
       end
 
       it 'will overwrite when forced' do
-        klippfile = read_fixture 'Klippfile-after-init'
+        klippfile = read_fixture 'Klippfile-after-prepare'
         File.expects(:write).with('Klippfile', klippfile)
-        Klipp.cli_init(%w[Example -f])
+        Klipp.cli_prepare(%w[Example -f])
       end
 
     end

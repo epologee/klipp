@@ -4,7 +4,7 @@ module Klipp
     attr_reader :identifier, :tokens
 
     def self.from_file(path)
-      raise "Klippfile not found in directory #{File.dirname path}. Run `klipp project init`." unless File.exists? path
+      raise "Klippfile not found in directory #{File.dirname path}. Run `klipp prepare`." unless File.exists? path
       string = IO.read path
       maker = Klipp::Maker.new
       maker.eval_string(string, path)
