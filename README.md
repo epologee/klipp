@@ -1,4 +1,4 @@
-# Klipp
+# Klipp [![Build Status](https://travis-ci.org/epologee/klipp.png)](https://travis-ci.org/epologee/klipp)
 ## Code templates for the rest of us.
 
 Klipp is a command line gem for creating new programming projects from existing templates. It was originally designed to create Xcode projects. However, there are no Apple or Xcode specific features in Klipp, so you can use it for pretty much any textfile-and-directory-based template.
