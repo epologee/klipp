@@ -1,4 +1,4 @@
-# Klipp [![Build Status](https://travis-ci.org/epologee/klipp.png)](https://travis-ci.org/epologee/klipp)
+# Klipp [![Build Status](https://travis-ci.org/epologee/klipp.png)](https://travis-ci.org/epologee/klipp) [![Coverage Status](https://coveralls.io/repos/epologee/klipp/badge.png)](https://coveralls.io/r/epologee/klipp)
 ## Code templates for the rest of us.
 
 Klipp is a ruby gem with a command line interface for creating new programming projects from existing templates. It was originally designed to create Xcode projects. However, there are no Apple or Xcode specific features in Klipp, so you can use it for pretty much any textfile-and-directory-based template.
