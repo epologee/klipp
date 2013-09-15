@@ -1,12 +1,12 @@
 module Klipp
 
-  class Maker
+  class Creator
     attr_reader :identifier, :tokens
 
     def self.from_file(path)
       raise "Klippfile not found in directory #{File.dirname path}. Run `klipp prepare`." unless File.exists? path
       string = IO.read path
-      maker = Klipp::Maker.new
+      maker = Klipp::Creator.new
       maker.eval_string(string, path)
     end
 

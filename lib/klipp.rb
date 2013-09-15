@@ -8,7 +8,7 @@ require 'template'
 require 'klipp/configuration'
 require 'klipp/version'
 require 'klipp/parameter_list'
-require 'klipp/maker'
+require 'klipp/creator'
 
 module Klipp
 
@@ -80,7 +80,7 @@ module Klipp
 
   def self.cli_create(params)
     params = Klipp::ParameterList.new(params)
-    maker = Klipp::Maker.from_file File.join(Dir.pwd, 'Klippfile')
+    maker = Klipp::Creator.from_file File.join(Dir.pwd, 'Klippfile')
     spec_path = Template::Spec.spec_path_for_identifier maker.identifier
     spec = Template::Spec.from_file spec_path
     spec.set_token_values(maker.tokens, params.splice_option('-v'))

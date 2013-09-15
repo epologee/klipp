@@ -100,9 +100,9 @@ describe Klipp do
       Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
       Dir.stubs(:pwd).returns(Dir.mktmpdir)
 
-      maker = Klipp::Maker.new
+      maker = Klipp::Creator.new
       maker.eval_string(read_fixture('Klippfile'), fixture_path('Klippfile'))
-      Klipp::Maker.stubs(:from_file).returns(maker)
+      Klipp::Creator.stubs(:from_file).returns(maker)
     end
 
     it 'creates a new project' do
