@@ -121,7 +121,7 @@ describe Klipp do
       output = StringIO.new
       highline = HighLine.new(input, output)
 
-      input << "KLPObject\n"
+      input << "KLPObject\nN\n"
       input.rewind
 
       Klipp.cli_create(%w(Interactive), highline)

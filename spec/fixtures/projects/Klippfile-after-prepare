@@ -21,7 +21,7 @@ create 'template-repository/Example' do |tokens|
   tokens[:CLASS_PREFIX] = ""
 
   # Secret toggle (to enable/disable that amazing feature)
-  # Boolean value, either `true` or `false` (no quotes)
+  # Boolean value, either 'true' or 'false'
   tokens[:SECRET_TOGGLE] = false
 
 end

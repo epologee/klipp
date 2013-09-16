@@ -95,10 +95,21 @@ describe Klipp::Creator do
         creator = Klipp::Creator.new()
         creator.expects(:invalidate).never
 
-        @input << "Object\n"
+        @input << "Object\ny\n"
         @input.rewind
 
         creator.ask_user_input('Interactive', @highline)
+      end
+
+      it 'invalidates booleans and asks again' do
+        creator = Klipp::Creator.new()
+        creator.expects(:invalidate).never
+
+        @input << "Object\nja\ny\n"
+        @input.rewind
+
+        creator.ask_user_input('Interactive', @highline)
+        p @output.string
       end
 
     end

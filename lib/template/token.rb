@@ -1,3 +1,13 @@
+class String
+  def matches_true?
+    Regexp.new('y|yes|true', Regexp::IGNORECASE).match(self)
+  end
+
+  def matches_false?
+    Regexp.new('n|no|false', Regexp::IGNORECASE).match(self)
+  end
+end
+
 module Template
 
   class Token
@@ -20,6 +30,13 @@ module Template
     end
 
     def value=(value)
+      if (self.type == :bool) && value.is_a?(String)
+        value = if value.matches_true?
+                  true
+                elsif value.matches_false?
+                  false
+                end
+      end
       raise "Invalid value '#{value.to_s}'. #{validation_hint}" unless validate?(value)
       @value = value
     end
@@ -28,12 +45,16 @@ module Template
       %w(NO YES)
     end
 
+    def validation
+      self.type == :bool ? Regexp.new('([yn])|yes|no', Regexp::IGNORECASE) : @validation
+    end
+
     def validation_hint
       case
         when self.type == :string then
           @validation_hint || (validation ? "Match /#{validation.to_s}/ (no custom validation_hint given)." : "Text required")
         when self.type == :bool then
-          "Boolean value, either `true` or `false` (no quotes)"
+          "Boolean value, either 'true' or 'false'"
       end
     end
 

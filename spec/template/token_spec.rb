@@ -65,8 +65,34 @@ describe Template::Token do
       @token.value.should eq false
     end
 
-    it 'invalidates strings assigned' do
-      expect { @token.value = 'true' }.to raise_error RuntimeError
+    it 'accepts booleans as strings' do
+      @token.value = 'true'
+      @token.value.should eq true
+
+      @token.value = 'yes'
+      @token.value.should eq true
+
+      @token.value = 'Yes'
+      @token.value.should eq true
+
+      @token.value = 'y'
+      @token.value.should eq true
+
+      @token.value = 'false'
+      @token.value.should eq false
+
+      @token.value = 'no'
+      @token.value.should eq false
+
+      @token.value = 'No'
+      @token.value.should eq false
+
+      @token.value = 'n'
+      @token.value.should eq false
+    end
+
+    it 'invalidates other strings' do
+      expect { @token.value = 'ja' }.to raise_error RuntimeError
     end
 
   end

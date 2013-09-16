@@ -6,4 +6,10 @@ spec 'Interactive' do |s|
     t.validation_hint = 'Prefixed, no spaces, at least 4 characters long'
   end
 
+  s.token :TOGGLE do |t|
+    t.comment = "Toggle value (to insert in any filename or string containing 'XXTOGGLEXX')"
+    t.type = :bool
+    # t.bool_strings = ['NO','YES']
+  end
+
 end
