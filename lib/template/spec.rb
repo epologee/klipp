@@ -51,17 +51,9 @@ module Template
     def initialize
       @tokens = Hash[]
 
-      blank = self[:BLANK] = Template::Token.new
-      blank.hidden = true
-      blank.value = ''
-
-      date = self[:DATE] = Template::Token.new
-      date.hidden = true
-      date.value = DateTime.now.strftime('%F')
-
-      year = self[:YEAR] = Template::Token.new
-      year.hidden = true
-      year.value = DateTime.now.strftime('%Y')
+      self[:BLANK] = Template::Token.new('', true)
+      self[:DATE] = Template::Token.new(DateTime.now.strftime('%F'), true)
+      self[:YEAR] = Template::Token.new(DateTime.now.strftime('%Y'), true)
     end
 
     def post_action=(action)
@@ -143,6 +135,7 @@ module Template
           invalidate msg+"token :#{name}. #{e.message}"
         end
       end
+      puts() if verbose
       @tokens.each do |name, token|
         invalidate msg+"missing value for token :#{name}" if token.value == nil
       end
@@ -150,6 +143,10 @@ module Template
 
     def invalidate(message)
       raise message
+    end
+
+    def each
+      @tokens.each { |name, token| yield(name, token) }
     end
 
     def klippfile

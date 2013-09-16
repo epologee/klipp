@@ -1,0 +1,9 @@
+spec 'Interactive' do |s|
+
+  s.token :SUBJECT_UNDER_TEST do |t|
+    t.comment = "Subject under test (usually a class name)"
+    t.validation = /^[A-Z][A-Za-z0-9]{4,}$/
+    t.validation_hint = 'Prefixed, no spaces, at least 4 characters long'
+  end
+
+end

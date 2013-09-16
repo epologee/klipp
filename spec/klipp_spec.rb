@@ -105,13 +105,27 @@ describe Klipp do
       Klipp::Creator.stubs(:from_file).returns(maker)
     end
 
-    it 'creates a new project' do
+    it 'creates files from a Klippfile' do
 
       Klipp.cli_create([])
       File.exists?(File.join Dir.pwd, 'Podfile').should be true
       File.exists?(File.join Dir.pwd, '.gitignore').should be true
       File.exists?(File.join Dir.pwd, 'AmazingApp').should be true
       File.exists?(File.join Dir.pwd, 'Example.klippspec').should be false
+
+    end
+
+    it 'creates files interactively' do
+
+      input = StringIO.new
+      output = StringIO.new
+      highline = HighLine.new(input, output)
+
+      input << "KLPObject\n"
+      input.rewind
+
+      Klipp.cli_create(%w(Interactive), highline)
+      File.exists?(File.join Dir.pwd, 'KLPObjectTests.m').should be true
 
     end
 

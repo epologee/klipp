@@ -4,8 +4,9 @@ module Template
     attr_accessor :hidden, :value, :type, :bool_strings
     attr_accessor :comment, :validation, :validation_hint
 
-    def initialize
-      @hidden = false
+    def initialize(value = nil, hidden = false)
+      self.value = value if value
+      @hidden = hidden
     end
 
     def type=(type)
@@ -30,7 +31,7 @@ module Template
     def validation_hint
       case
         when self.type == :string then
-          @validation_hint || "Match /#{validation.to_s}/ (no custom validation_hint given)."
+          @validation_hint || (validation ? "Match /#{validation.to_s}/ (no custom validation_hint given)." : "Text required")
         when self.type == :bool then
           "Boolean value, either `true` or `false` (no quotes)"
       end

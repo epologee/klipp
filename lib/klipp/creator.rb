@@ -6,8 +6,13 @@ module Klipp
     def self.from_file(path)
       raise "Klippfile not found in directory #{File.dirname path}. Run `klipp prepare`." unless File.exists? path
       string = IO.read path
-      maker = Klipp::Creator.new
-      maker.eval_string(string, path)
+      creator = Klipp::Creator.new
+      creator.eval_string(string, path)
+    end
+
+    def self.from_user_input(template_identifier, highline)
+      creator = Klipp::Creator.new
+      creator.ask_user_input(template_identifier, highline)
     end
 
     def initialize
@@ -19,6 +24,19 @@ module Klipp
         eval(string, nil, path)
       rescue Exception => e
         raise "Error evaluating klippfile: #{File.basename(path)}: #{e.message}\n  #{e.backtrace.join("\n  ")}"
+      end
+      validate
+    end
+
+    def ask_user_input(identifier, highline = HighLine.new)
+      @identifier = identifier
+      spec_path = Template::Spec.spec_path_for_identifier(identifier)
+      template = Template::Spec.from_file(spec_path)
+      template.each do |name, token|
+        self.tokens[name] = highline.ask("#{token.comment}?") { |q|
+          q.validate = token.validation if token.validation
+          q.responses[:not_valid] = token.validation_hint if token.validation_hint
+        } unless token.hidden
       end
       validate
     end

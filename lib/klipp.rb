@@ -3,6 +3,7 @@ require 'formatador'
 require 'colorize'
 require 'fileutils'
 require 'grit'
+require 'highline/import'
 
 require 'template'
 require 'klipp/configuration'
@@ -78,12 +79,17 @@ module Klipp
     end
   end
 
-  def self.cli_create(params)
+  def self.cli_create(params, highline = nil)
     params = Klipp::ParameterList.new(params)
-    maker = Klipp::Creator.from_file File.join(Dir.pwd, 'Klippfile')
-    spec_path = Template::Spec.spec_path_for_identifier maker.identifier
+    if (interactive_identifier = params.shift_argument)
+      creator = Klipp::Creator.from_user_input(interactive_identifier, highline)
+      puts()
+    else
+      creator = Klipp::Creator.from_file File.join(Dir.pwd, 'Klippfile')
+    end
+    spec_path = Template::Spec.spec_path_for_identifier creator.identifier
     spec = Template::Spec.from_file spec_path
-    spec.set_token_values(maker.tokens, params.splice_option('-v'))
+    spec.set_token_values(creator.tokens, params.splice_option('-v'))
 
     block_actions = spec.block_actions_under_git && git_repository?
     if spec.pre_actions.count > 0
@@ -93,12 +99,13 @@ module Klipp
       else
         run_actions(spec.pre_actions) if Klipp.env.prod?
         Formatador.display_line("[green][√] Pre-actions complete.[/]")
+        puts()
       end
     end
 
     force = params.splice_option('-f')
 
-    source_dir = File.dirname(Template::Spec.spec_path_for_identifier maker.identifier)
+    source_dir = File.dirname(Template::Spec.spec_path_for_identifier creator.identifier)
     target_dir = Dir.pwd
 
     source_files = Dir.glob(File.join(source_dir, '**', '*'), File::FNM_DOTMATCH).reject { |f| f == spec_path }
@@ -109,25 +116,26 @@ module Klipp
 
     verbose = params.splice_option '-v'
 
-    Formatador.display_line("[green][√] Creation completed using template #{Template::Spec.expand_identifier maker.identifier}. #{'Run `klipp make -v` to see what files were created.' unless verbose}[/]")
+    Formatador.display_line("[green][√] Creation completed using template #{Template::Spec.expand_identifier creator.identifier}. #{'Run `klipp create -v` to see what files were created.' unless verbose}[/]")
+    puts()
 
     if (verbose)
-      puts()
       strip = File.dirname(Dir.pwd)+File::SEPARATOR
       result.each { |r| Formatador.display_line(r.gsub(strip, '')) unless File.directory? r }
+      puts()
     end
 
     if spec.post_actions.count > 0
       if block_actions
-        puts()
         Formatador.display_line("[yellow][i][/] Git repository found, not running post-actions (see .klippspec).")
+        puts()
       else
         run_actions(spec.post_actions) if Klipp.env.prod?
         Formatador.display_line("[green][√] Post-actions complete.[/]")
+        puts()
       end
     end
 
-    puts()
     Formatador.display_line("[green][√] Done.[/]")
   end
 
