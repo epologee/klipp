@@ -20,4 +20,8 @@ create 'template-repository/Example' do |tokens|
   # All caps, at least three, starting with an alphabetical character
   tokens[:CLASS_PREFIX] = ""
 
+  # Secret toggle (to enable/disable that amazing feature)
+  # Boolean value, either `true` or `false` (no quotes)
+  tokens[:SECRET_TOGGLE] = false
+
 end

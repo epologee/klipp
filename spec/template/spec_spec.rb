@@ -188,6 +188,7 @@ describe Template::Spec do
           @values[:BUNDLE_ID] = "com.epologee.klipp"
           @values[:ORGANIZATION_NAME] = "epologee"
           @values[:CLASS_PREFIX] = "KLP"
+          @values[:SECRET_TOGGLE] = true
         end
 
         it 'validates token values' do
@@ -196,8 +197,8 @@ describe Template::Spec do
 
         it 'replaces delimited tokens with its values' do
           @spec.set_token_values @values
-          source = 'XXPROJECT_IDXX - XXPROJECT_TITLEXX - XXBUNDLE_IDXX - XXORGANIZATION_NAMEXX - XXCLASS_PREFIXXX'
-          target = 'Klipp - Templates for the rest of us - com.epologee.klipp - epologee - KLP'
+          source = 'XXPROJECT_IDXX - XXPROJECT_TITLEXX - XXBUNDLE_IDXX - XXORGANIZATION_NAMEXX - XXCLASS_PREFIXXX - XXSECRET_TOGGLEXX'
+          target = 'Klipp - Templates for the rest of us - com.epologee.klipp - epologee - KLP - YES'
           @spec.replace_tokens(source).should eq target
         end
       end

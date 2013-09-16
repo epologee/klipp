@@ -20,4 +20,7 @@ create 'template-repository/Example' do |tokens|
   # All caps, at least three, starting with an alphabetical character
   tokens[:CLASS_PREFIX] = "AMZ"
 
+  tokens[:SECRET_TOGGLE] = true
+
+
 end

@@ -158,7 +158,7 @@ module Template
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment
           kf += "  # #{token.validation_hint}\n" if token.validation_hint
-          kf += "  tokens[:#{name}] = \"\"\n"
+          kf += "  tokens[:#{name}] = #{token.type == :bool ? 'false' : "\"\""}\n"
           kf += "\n"
         end
       end
@@ -175,6 +175,12 @@ module Template
       ks += "    t.comment = \"Replaceable value (to insert in any filename or string containing 'XXREPLACEABLEXX')\"\n"
       ks += "    t.validation = /^[A-Z][A-Za-z0-9 ]{2,}$/\n"
       ks += "    t.validation_hint = 'At least three characters long, start with a capital character, may contain spaces'\n"
+      ks += "  end\n"
+      ks += "\n"
+      ks += "  s.token :TOGGLE do |t|\n"
+      ks += "    t.comment = \"Toggle value (to insert in any filename or string containing 'XXTOGGLEXX')\"\n"
+      ks += "    t.type = :bool\n"
+      ks += "    # t.bool_strings = ['NO','YES']\n"
       ks += "  end\n"
       ks += "\n"
       ks += "  # ...\n"
@@ -208,7 +214,7 @@ module Template
 
     def replace_tokens(string_with_tokens, delimiter='XX')
       replaced = string_with_tokens
-      @tokens.each { |name, token| replaced.gsub!(delimiter+name.to_s+delimiter, token.value) }
+      @tokens.each { |name, token| replaced.gsub!(delimiter+name.to_s+delimiter, token.to_s) }
       replaced
     end
 

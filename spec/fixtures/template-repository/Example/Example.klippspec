@@ -33,4 +33,8 @@ spec 'Example' do |s|
     t.validation_hint = 'All caps, at least three, starting with an alphabetical character'
   end
 
+  s.token :SECRET_TOGGLE do |t|
+    t.comment = 'Secret toggle (to enable/disable that amazing feature)'
+    t.type = :bool
+  end
 end
