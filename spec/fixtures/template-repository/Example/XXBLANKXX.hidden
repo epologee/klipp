@@ -1,0 +1,10 @@
+# OS X noise
+.DS_Store
+
+# Xcode noise
+xcuserdata
+.xccheckout
+/Build
+
+# AppCode noise
+.idea

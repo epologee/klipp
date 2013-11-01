@@ -197,8 +197,8 @@ describe Template::Spec do
 
         it 'replaces delimited tokens with its values' do
           @spec.set_token_values @values
-          source = 'XXPROJECT_IDXX - XXPROJECT_TITLEXX - XXBUNDLE_IDXX - XXORGANIZATION_NAMEXX - XXCLASS_PREFIXXX - XXSECRET_TOGGLEXX'
-          target = 'Klipp - Templates for the rest of us - com.epologee.klipp - epologee - KLP - YES'
+          source = 'XXPROJECT_IDXX - XXPROJECT_TITLEXX - XXBUNDLE_IDXX - XXORGANIZATION_NAMEXX - XXCLASS_PREFIXXX - XXSECRET_TOGGLEXX - [XXBLANKXX]'
+          target = 'Klipp - Templates for the rest of us - com.epologee.klipp - epologee - KLP - YES - []'
           @spec.replace_tokens(source).should eq target
         end
       end

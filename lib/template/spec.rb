@@ -200,7 +200,11 @@ module Template
         if File.binary? source_file
           FileUtils.cp(source_file, target_file)
         else
-          IO.write target_file, replace_tokens(File.read(source_file))
+          begin
+            IO.write target_file, replace_tokens(File.read(source_file))
+          rescue
+            FileUtils.cp(source_file, target_file)
+          end
         end
       else
         raise "#{target_file} already exists, not overwriting. Use -f to force overwriting."
@@ -210,11 +214,18 @@ module Template
     end
 
     def replace_tokens(string_with_tokens, delimiter='XX')
+      unless string_with_tokens.valid_encoding?
+        raise "Invalid string encoding #{string_with_tokens.encoding}"
+      end
+
       replaced = string_with_tokens
-      @tokens.each { |name, token| replaced.gsub!(delimiter+name.to_s+delimiter, token.to_s) }
+      @tokens.each do |name, token|
+        needle = delimiter+name.to_s+delimiter
+        replacement = token.to_s
+        replaced.gsub!(needle, replacement)
+      end
       replaced
     end
-
   end
 
 end

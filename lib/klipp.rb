@@ -49,6 +49,7 @@ module Klipp
         Formatador.display_line("[yellow][?] #{e.message}[/]")
       else
         Formatador.display_line("[red][!] #{e.message}[/]")
+        Formatador.display_line(e.backtrace[0..10].join("\n"))
     end
     1 # exit code
   end
