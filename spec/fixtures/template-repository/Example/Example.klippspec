@@ -36,5 +36,6 @@ spec 'Example' do |s|
   s.token :SECRET_TOGGLE do |t|
     t.comment = 'Secret toggle (to enable/disable that amazing feature)'
     t.type = :bool
+    t.default_value = true
   end
 end

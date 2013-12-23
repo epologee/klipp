@@ -155,7 +155,11 @@ module Template
         unless token.hidden
           kf += "  # #{token.comment}\n" if token.comment
           kf += "  # #{token.validation_hint}\n" if token.validation_hint
-          kf += "  tokens[:#{name}] = #{token.type == :bool ? 'false' : "\"\""}\n"
+          if token.type == :bool
+            kf += "  tokens[:#{name}] = #{token.default_value ? 'true' : 'false'}\n"
+          else
+            kf += "  tokens[:#{name}] = \"#{token.default_value}\"\n"
+          end
           kf += "\n"
         end
       end

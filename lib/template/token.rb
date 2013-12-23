@@ -11,7 +11,7 @@ end
 module Template
 
   class Token
-    attr_accessor :hidden, :value, :type, :bool_strings
+    attr_accessor :hidden, :value, :default_value, :type, :bool_strings
     attr_accessor :comment, :validation, :validation_hint
 
     def initialize(value = nil, hidden = false)
@@ -41,6 +41,10 @@ module Template
       @value = value
     end
 
+    def default_value
+      @default_value || (self.type == :string ? '' : false)
+    end
+
     def bool_strings
       %w(NO YES)
     end
@@ -54,7 +58,7 @@ module Template
         when self.type == :string then
           @validation_hint || (validation ? "Match /#{validation.to_s}/ (no custom validation_hint given)." : "Text required")
         when self.type == :bool then
-          "Boolean value, either 'true' or 'false'"
+          "Boolean value, either 'true' or 'false' (but without the apostrophes)"
       end
     end
 
