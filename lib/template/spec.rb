@@ -156,14 +156,15 @@ module Template
     def confirm_required_files()
       missing_files = Array.new
       self.required_files.each do |required_file|
-        file_path = File.join(required_file.directory, required_file.name)
+        file_path = self.replace_tokens File.join(required_file.directory, required_file.name)
+        FileUtils.mkdir_p File.dirname(file_path)
         missing_files << required_file unless File.exists? file_path
       end
 
       if missing_files.length > 0
         message = "Required file#{missing_files.length > 1 ? 's' : ''} not found:\n\n"
         missing_files.each do |missing_file|
-          file_path = File.join(missing_file.directory, missing_file.name)
+          file_path = self.replace_tokens File.join(missing_file.directory, missing_file.name)
           message << "\t#{file_path} - #{missing_file.comment ? "#{missing_file.comment}" : ''}\n"
         end
         raise message
