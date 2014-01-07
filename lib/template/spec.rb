@@ -4,7 +4,7 @@ module Template
     require 'date'
 
     attr_accessor :identifier, :block_actions_under_git
-    attr_reader :post_actions
+    attr_reader :post_actions, :required_files
 
     def self.identifier_is_ambiguous(identifier)
       specs_matching_identifier(identifier).count == 1
@@ -50,6 +50,7 @@ module Template
 
     def initialize
       @tokens = Hash[]
+      @required_files = Array.new
 
       self[:BLANK] = Template::Token.new('', true)
       self[:DATE] = Template::Token.new(DateTime.now.strftime('%F'), true)
@@ -123,21 +124,49 @@ module Template
     end
 
     def set_token_values(tokens, verbose=false)
-      msg = 'Token configuration error: '
+      token_errors = Hash[]
       puts() if verbose
       tokens.each do |name, value|
         token = self[name]
-        invalidate msg+"unknown token :#{name}" unless token
         begin
-          Formatador.display_line("#{name}: [bold]#{value}[/]") if verbose
-          token.value = value
+          if token
+            Formatador.display_line("#{name}: [bold]#{value}[/]") if verbose
+            token.value = value
+          else
+            token_errors[name] = "unknown token :#{name}"
+          end
         rescue Exception => e
-          invalidate msg+"token :#{name}. #{e.message}"
+          token_errors[name] = "token :#{name}. #{e.message}"
         end
       end
-      puts() if verbose
+
       @tokens.each do |name, token|
-        invalidate msg+"missing value for token :#{name}" if token.value == nil
+        token_errors[name] = "missing value for token :#{name}" if token.value == nil && token_errors[name] == nil
+      end
+
+      if token_errors.length > 0
+        msg = "Token configuration error:\n\n\t"
+        msg << token_errors.map { |name, error_message| error_message }.join("\n\t")
+        invalidate msg
+      end
+
+      puts() if verbose
+    end
+
+    def confirm_required_files()
+      missing_files = Array.new
+      self.required_files.each do |required_file|
+        file_path = File.join(required_file.directory, required_file.name)
+        missing_files << required_file unless File.exists? file_path
+      end
+
+      if missing_files.length > 0
+        message = "Required file#{missing_files.length > 1 ? 's' : ''} not found:\n\n"
+        missing_files.each do |missing_file|
+          file_path = File.join(missing_file.directory, missing_file.name)
+          message << "\t#{file_path} - #{missing_file.comment ? "#{missing_file.comment}" : ''}\n"
+        end
+        raise message
       end
     end
 
@@ -147,6 +176,13 @@ module Template
 
     def each
       @tokens.each { |name, token| yield(name, token) }
+    end
+
+    def required_file name, &config
+      required_file = Template::RequiredFile.new name
+      raise 'Incomplete file configuration' unless block_given?
+      config.yield(required_file)
+      @required_files << required_file
     end
 
     def klippfile

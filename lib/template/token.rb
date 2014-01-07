@@ -46,7 +46,7 @@ module Template
     end
 
     def bool_strings
-      %w(NO YES)
+      @bool_strings ? @bool_strings : %w(NO YES)
     end
 
     def validation

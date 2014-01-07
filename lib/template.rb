@@ -1,5 +1,6 @@
 require 'template/spec'
 require 'template/token'
+require 'template/required_file'
 
 module Template
 

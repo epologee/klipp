@@ -114,30 +114,47 @@ describe Template::Spec do
       @template.post_actions = ['git init', 'git add .', 'git commit -m "Initial commit."', 'pod install']
       @template.post_actions.should eq ['git init', 'git add .', 'git commit -m "Initial commit."', 'pod install']
     end
+
     it 'has a token hash' do
       @template[:PROJECT_ID] = Template::Token.new
       @template[:PROJECT_ID].should be_an_instance_of(Template::Token)
     end
 
-    it 'creates a token' do
-      yielded_token = :not_a_token
-      @template.token(:PROJECT_ID) { |t| yielded_token = t }
-      yielded_token.should be_an_instance_of Template::Token
+    describe 'token support' do
+      it 'creates a token' do
+        yielded_token = :not_a_token
+        @template.token(:PROJECT_ID) { |t| yielded_token = t }
+        yielded_token.should be_an_instance_of Template::Token
+      end
+
+      it 'has a blank token' do
+        @template[:BLANK].hidden.should eq true
+        @template[:BLANK].value.should eq ''
+      end
+
+      it 'has a date token' do
+        @template[:DATE].hidden.should eq true
+        @template[:DATE].value.should eq DateTime.now.strftime('%F')
+      end
+
+      it 'has a year token' do
+        @template[:YEAR].hidden.should eq true
+        @template[:YEAR].value.should eq '2014'
+      end
     end
 
-    it 'has a blank token' do
-      @template[:BLANK].hidden.should eq true
-      @template[:BLANK].value.should eq ''
-    end
+    describe 'required file support' do
 
-    it 'has a date token' do
-      @template[:DATE].hidden.should eq true
-      @template[:DATE].value.should eq DateTime.now.strftime('%F')
-    end
+      it 'creates a required file instance' do
+        yielded_file = :not_a_file
+        @template.required_file('file.txt') { |f| yielded_file = f }
+        yielded_file.should be_an_instance_of Template::RequiredFile
+      end
 
-    it 'has a year token' do
-      @template[:YEAR].hidden.should eq true
-      @template[:YEAR].value.should eq '2013'
+      it 'has no files at the beginning' do
+        @template.required_files.length.should eq 0
+      end
+
     end
 
   end

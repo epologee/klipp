@@ -65,7 +65,7 @@ describe Klipp do
         File.stubs(:exists?).returns(false)
       end
 
-      it 'write a new Klippfile' do
+      it 'writes a new Klippfile' do
         klippfile = read_fixture 'Klippfile-after-prepare'
         File.expects(:write).with('Klippfile', klippfile)
         Klipp.cli_prepare(%w[Example])
@@ -131,4 +131,22 @@ describe Klipp do
 
   end
 
+  context 'with required file' do
+
+    before do
+      Klipp::Configuration.stubs(:root_dir).returns(File.join(__dir__, 'fixtures'))
+      Dir.stubs(:pwd).returns(Dir.mktmpdir)
+
+      maker = Klipp::Creator.new
+      maker.eval_string(read_fixture('Klippfile-file-requirement'), fixture_path('Klippfile-file-requirement'))
+      Klipp::Creator.stubs(:from_file).returns(maker)
+    end
+
+    it 'fails without the required files' do
+
+      expect { Klipp.cli_create([]) }.to raise_error Klipp::ClusterError
+
+    end
+
+  end
 end

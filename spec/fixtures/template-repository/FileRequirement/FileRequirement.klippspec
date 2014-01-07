@@ -1,0 +1,10 @@
+spec 'FileRequirement' do |s|
+  s.block_actions_under_git = true
+  # s.pre_actions = ['echo "Hello klipp!"']
+  # s.post_actions = ['pod install']
+
+  s.required_file 'icon.png' do |f|
+    f.comment = '72 x 72 pixels icon, used for the iOS 7 springboard on iPad'
+    f.directory = 'images'
+  end
+end

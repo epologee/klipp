@@ -16,6 +16,10 @@ module Klipp
   class Hint < StandardError
   end
 
+  class ClusterError < StandardError
+    attr_accessor :messages
+  end
+
   def self.env
     @@env ||= StringInquirer.new('prod')
   end
@@ -47,9 +51,11 @@ module Klipp
     case e
       when Klipp::Hint
         Formatador.display_line("[yellow][?] #{e.message}[/]")
+      when Klipp::ClusterError
+        e.messages.each { |msg| Formatador.display_line("[red][!] #{msg}[/]\n") }
       else
-        Formatador.display_line("[red][!] #{e.message}[/]")
-        Formatador.display_line(e.backtrace[0..10].join("\n"))
+        Formatador.display_line("[red][!] #{e.message}[/]\n")
+        Formatador.display_line(e.backtrace.first)
     end
     1 # exit code
   end
@@ -90,7 +96,26 @@ module Klipp
     end
     spec_path = Template::Spec.spec_path_for_identifier creator.identifier
     spec = Template::Spec.from_file spec_path
-    spec.set_token_values(creator.tokens, params.splice_option('-v'))
+
+    validation_errors = Array.new
+
+    begin
+      spec.set_token_values(creator.tokens, params.splice_option('-v'))
+    rescue Exception => e
+      validation_errors << e.message
+    end
+
+    begin
+      spec.confirm_required_files
+    rescue Exception => e
+      validation_errors << e.message
+    end
+
+    if validation_errors.length > 0
+      e = Klipp::ClusterError.new
+      e.messages = validation_errors
+      raise e
+    end
 
     block_actions = spec.block_actions_under_git && git_repository?
     if spec.pre_actions.count > 0
@@ -160,7 +185,7 @@ end
 
 class StringInquirer < String
   def method_missing(method_name, *arguments)
-    if method_name.to_s[-1,1] == '?'
+    if method_name.to_s[-1, 1] == '?'
       self == method_name.to_s[0..-2]
     else
       super
