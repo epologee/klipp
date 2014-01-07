@@ -22,11 +22,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w(lib)
 
   spec.add_runtime_dependency 'bundler', '~> 1.3'
-  spec.add_runtime_dependency 'rake'
-  spec.add_runtime_dependency 'ptools'
-  spec.add_runtime_dependency 'formatador'
-  spec.add_runtime_dependency 'colorize'
-  spec.add_runtime_dependency 'grit'
-  spec.add_runtime_dependency 'highline'
-  spec.add_runtime_dependency 'zaru'
+  spec.add_runtime_dependency 'rake', '~> 10.1'
+  spec.add_runtime_dependency 'ptools', '~> 1.2'
+  spec.add_runtime_dependency 'formatador', '~> 0.2'
+  spec.add_runtime_dependency 'colorize', '~> 0.6'
+  spec.add_runtime_dependency 'grit', '~> 2.5'
+  spec.add_runtime_dependency 'highline', '~> 1.6'
+  spec.add_runtime_dependency 'zaru', '~> 0'
 end
