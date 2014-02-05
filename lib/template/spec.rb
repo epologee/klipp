@@ -133,7 +133,7 @@ module Template
             Formatador.display_line("#{name}: [bold]#{value}[/]") if verbose
             token.value = value
           else
-            token_errors[name] = "unknown token :#{name}"
+            token_errors[name] = "unanticipated token encountered in the Klippfile :#{name}"
           end
         rescue Exception => e
           token_errors[name] = "token :#{name}. #{e.message}"
