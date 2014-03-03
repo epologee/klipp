@@ -206,7 +206,9 @@ module Template
     end
 
     def klippspec
-      ks = "spec '#{identifier}' do |s|\n"
+      ks = "# encoding=utf-8\n"
+      ks += "\n"
+      ks += "spec '#{identifier}' do |s|\n"
       ks += "  s.block_actions_under_git = true\n"
       ks += "  # s.pre_actions = ['echo \"Hello klipp!\"']\n"
       ks += "  # s.post_actions = ['pod install']\n"
@@ -225,7 +227,7 @@ module Template
       ks += "\n"
       ks += "  # ...\n"
       ks += "\n"
-      ks += "end"
+      ks += "end\n"
     end
 
     def target_file(source_dir, source_file, target_dir)

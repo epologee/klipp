@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 spec 'Example' do |s|
   s.block_actions_under_git = true
   s.pre_actions = ['git init', 'git add .', 'git commit -m "Initial commit."']
