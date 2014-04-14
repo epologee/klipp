@@ -245,10 +245,11 @@ module Template
         if File.binary? source_file
           FileUtils.cp(source_file, target_file)
         else
+          FileUtils.cp(source_file, target_file)
           begin
             IO.write target_file, replace_tokens(File.read(source_file))
           rescue
-            FileUtils.cp(source_file, target_file)
+            # nothing
           end
         end
       else
