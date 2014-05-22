@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Template
 
   class Spec
@@ -133,7 +135,7 @@ module Template
             Formatador.display_line("#{name}: [bold]#{value}[/]") if verbose
             token.value = value
           else
-            token_errors[name] = "unknown token :#{name}"
+            token_errors[name] = "unanticipated token encountered in the Klippfile :#{name}"
           end
         rescue Exception => e
           token_errors[name] = "token :#{name}. #{e.message}"
@@ -204,7 +206,9 @@ module Template
     end
 
     def klippspec
-      ks = "spec '#{identifier}' do |s|\n"
+      ks = "# encoding=utf-8\n"
+      ks += "\n"
+      ks += "spec '#{identifier}' do |s|\n"
       ks += "  s.block_actions_under_git = true\n"
       ks += "  # s.pre_actions = ['echo \"Hello klipp!\"']\n"
       ks += "  # s.post_actions = ['pod install']\n"
@@ -223,7 +227,7 @@ module Template
       ks += "\n"
       ks += "  # ...\n"
       ks += "\n"
-      ks += "end"
+      ks += "end\n"
     end
 
     def target_file(source_dir, source_file, target_dir)
@@ -241,10 +245,11 @@ module Template
         if File.binary? source_file
           FileUtils.cp(source_file, target_file)
         else
+          FileUtils.cp(source_file, target_file)
           begin
             IO.write target_file, replace_tokens(File.read(source_file))
           rescue
-            FileUtils.cp(source_file, target_file)
+            # nothing
           end
         end
       else

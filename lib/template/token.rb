@@ -29,6 +29,10 @@ module Template
       @type || :string
     end
 
+    def value
+      @value || self.default_value
+    end
+
     def value=(value)
       if (self.type == :bool) && value.is_a?(String)
         value = if value.matches_true?

@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 Template::Spec.new do |s|
   s.name = 'BadExample'
   s.lalala = 'pod install'
