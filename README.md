@@ -6,19 +6,31 @@ Klipp is a Ruby gem that you can use to replicate folder structures, while doing
 
 I developed Klipp as an alternative to the templating system of Apple's Xcode, to use while developing iOS projects. However, there are no Apple or Xcode specific features in Klipp, so you can use it for pretty much any textfile-and-directory-based template.
 
+## Installation
+
+Install Klipp with RubyGems:
+
+    $ gem install klipp
+    
+Then run Klipp from the command line and read the instructions:
+
+    $ klipp
+    
+## Templates a.k.a. Specs
+
+When you execute `klipp` the first time, it will create a `.klipp` folder in your home directory, where it will search for template directories. Each template has one `.klippspec` file. Upon first use however, you will not have any specs. For starters you might try my personal specs by executing:
+
+    $ git clone https://github.com/epologee/klipp-specs.git ~/.klipp/epologee
+    
+After that, you can call `klipp template list` to see the specs it includes.
+
+## Inspiration
+
 I've borrowed some of the terminology of Klipp from the RubyGem and CocoaPods community, which is why you see things like this:
 
 + `.klippspec` files defining the structure of a template (compare to `.gemspec` and `.podspec`)
 + `Klippfile` files used to setup a new project from an existing template (compare to `Gemfile` and `Podfile`)
 + The `~/.klipp` folder containing your templates (compare to `~/.cocoapods`)
-
-## Templates a.k.a. Specs
-
-When you execute `klipp` the first time, it will create a `.klipp` folder in your home directory, where it will search for template directories. Each template has one `.klippspec` file. Upon first use however, you will not have any specs. For starters you might try my personal specs by executing:
-
-    git clone https://github.com/epologee/klipp-specs.git ~/.klipp/epologee
-    
-After that, you can call `klipp template list` to see the specs it includes.
 
 ## Usage
 
@@ -40,3 +52,5 @@ The gem in its current state is very usable. It's got decent rspec coverage (96%
 + The ability to update an existing `Klippfile` when the corresponding `project.klippspec` is updated underneath.
 + Better feedback when something is missing, like token values or terminal commands.
 + A setup to share your templates, like the specs from CocoaPods and RubyGems projects.
+
+So if you're willing to help, feel free to fork and send those pull requests!
