@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Template::Token do
-
   before do
     @token = Template::Token.new
   end
@@ -15,7 +14,6 @@ describe Template::Token do
   end
 
   context 'with type string' do
-
     it 'has a hidden property' do
       @token.hidden = true
       @token.hidden.should eq true
@@ -48,13 +46,12 @@ describe Template::Token do
     it 'invalidates booleans assigned' do
       expect { @token.value = true }.to raise_error RuntimeError
     end
-
   end
 
   context 'with type bool' do
-
     before do
       @token.type = :bool
+      @token.default_value = true
     end
 
     it 'accepts boolean values' do
@@ -94,7 +91,5 @@ describe Template::Token do
     it 'invalidates other strings' do
       expect { @token.value = 'ja' }.to raise_error RuntimeError
     end
-
   end
-
 end
